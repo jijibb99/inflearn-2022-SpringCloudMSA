@@ -109,7 +109,7 @@ API Gateway Service 주요 기능
     ```shell
     http://192.168.43.50:2203/welcome
     ```         
-### Step4) Zuul Service
+### Step4) Zuul Service (skip)
 - Spring Boot: 2.3.8
 - Dependencies: Lombok, Spring Web, Zuul
 ```note
@@ -119,131 +119,350 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
 
 
 ## 3. Spring Cloud Gateway – 기본
+1. Step1) Dependencies
+   - 프로젝트: apigateway-service
+   - DevTools, Eureka Discovery Client, Gateway
+   - Spring Boot: 2.4.2
+   - Spring Cloud: 2020.0.0
+2. Step2) application.properties (or application.yml)
+      ```yaml
+      server:
+        port: 8000
+      
+      spring:
+        application:
+          name: apigateway-service
+        cloud:
+          gateway:
+            routes:
+              - id: first-service
+                uri: http://localhost:8081
+                predicates:
+                  - Path=/first-service/**
+              - id: second-service
+                uri: http://localhost:8082
+                predicates:
+                  - Path=/second-service/**
+      ```
+3. Step3) Test
+   - ![](images/02-2-DefaultGatewayTest.png)
+``
 ## 4. Spring Cloud Gateway – Filter
+- 기본 필터(프로그램 기반)
+- Filter using Property
+- Custom filter
+- Global Filter
+- Custom Filter(Logging)
+- ![](images/02-4-FilterConcept.png)
+
+###  기본 필터(프로그램 기반)
+1. FilterConfig.java
+   - Step4) Filter using Java Code – FilterConfig.java
+
+      ```java
+      @Configuration
+      public class FilterConfig {
+          @Bean
+          public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+              return builder.routes()
+                      .route(r -> r.path("/first-service/**")
+                                  .filters(f -> f.addRequestHeader("first-request", "first-request-header")
+                                                 .addResponseHeader("first-response", "first-response-header"))
+                                  .uri("http://localhost:8081"))
+                      .route(r -> r.path("/second-service/**")
+                              .filters(f -> f.addRequestHeader("second-request", "second-request-header")
+                                      .addResponseHeader("second-response", "second-response-header"))
+                              .uri("http://localhost:8082"))
+                      .build();
+          }
+      }
+      ```
+2. 소스 수정(header값 출력 확인)
+   - config에서 입력한 값을 출력해 보자
+   - Step4) Filter using Java Code – FirstServiceController.java, SecondServiceController.java
+       ```java
+       /**
+        *  Spring Cloud Gateway – Filter
+        *  - Gateway 필터에서 해더변경한 내역 확인용도
+        *  - com.example.apigatewayservice.config.FilterConfig 확인
+        */
+       @GetMapping("/message")
+       public String message(@RequestHeader("first-request") String header) {
+           log.info("==@RequestHeader(\"first-request\") ==> {}" , header);
+           return "Hello World in First Service.";
+       }
+       ```
+3. 테스트
+   - ![](images/2-4Step4Test.png)
+
+```shell
+
+```
+
+###  Filter using Property
+Step5) Filter using Property – application.yml
+1. application.yml
+   - routes의 정ㅂ에 filters 추가
+
+      ```yaml
+            routes:
+              - id: first-service
+                uri: http://localhost:8081
+                predicates:
+                  - Path=/first-service/**
+      #yaml을 이용한 필터 추가하기
+                filters:
+                  - AddRequestHeader=first-request, first-request-header2
+                  - AddResponseHeader=first-response, first-response-header2
+      ```
+
+2. 테스트
+   - http://127.0.0.1:8000/first-service/message
+   - ![](images/2-4-ConfigFilterTest.png)
+
+###  Custom Filter
+1. Step6) Custom Filter – CustomFilter.java
+
+    ```java
+    @Component
+    @Slf4j
+    public class CustomFilter extends AbstractGatewayFilterFactory<CustomFilter.Config> {
+        ...
+    
+        @Override
+        public GatewayFilter apply(Config config) {
+            // Custom Pre Filter
+            return (exchange, chain) -> {
+                ServerHttpRequest request = exchange.getRequest();
+                ServerHttpResponse response = exchange.getResponse();
+    
+                log.info("Custom PRE filter: request id -> {}", request.getId());
+    
+                // Custom Post Filter
+                return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                    log.info("Custom POST filter: response code -> {}", response.getStatusCode());
+                }));
+            };
+        }
+    
+    }
+    ```
+
+2. Step6) Custom Filter – application.yml
+
+    ```yaml
+          routes:
+            - id: first-service
+              uri: http://localhost:8081
+              predicates:
+                - Path=/first-service/**
+              filters:
+    #            - AddRequestHeader=first-request, first-request-header2
+    #            - AddResponseHeader=first-response, first-response-header2
+                - CustomFilter
+    ```
+
+3. Step6) Custom Filter – FirstServiceController.java, SecondServiceController.java
+    ```java
+        @GetMapping("/check")
+        public String check() {
+            log.info("==check ...");
+            return "Hello World in First Service Check.";
+        }
+    ```
+4. Test
+   - http://127.0.0.1:8000/first-service/check
+   - ![](images/2-4-CustomerFilterTest.png)
+
+
+### Global Filter
+1. Step7) Global Filter – GlobalFilter.java
+
+      ```java
+      @Component
+      @Slf4j
+      public class GlobalFilter extends AbstractGatewayFilterFactory<GlobalFilter.Config> {
+          public GlobalFilter() {
+              super(Config.class);
+          }
+      
+          @Override
+          public GatewayFilter apply(Config config) {
+              return ((exchange, chain) -> {
+                  ServerHttpRequest request = exchange.getRequest();
+                  ServerHttpResponse response = exchange.getResponse();
+      
+                  log.info("Global Filter baseMessage: {}, {}", config.getBaseMessage(), request.getRemoteAddress());
+                  if (config.isPreLogger()) {
+                      log.info("Global Filter Start: request id -> {}", request.getId());
+                  }
+                  return chain.filter(exchange).then(Mono.fromRunnable(()->{
+                      if (config.isPostLogger()) {
+                          log.info("Global Filter End: response code -> {}", response.getStatusCode());
+                      }
+                  }));
+              });
+          }
+      
+          @Data
+          public static class Config {
+              private String baseMessage;
+              private boolean preLogger;
+              private boolean postLogger;
+          }
+      }
+      ```
+
+2. Global Filter – application.yml
+
+      ```yaml
+          gateway:
+            default-filters:
+              - name: GlobalFilter
+                args:
+                  baseMessage: Spring Cloud BaseMessage GlobalFilter
+                  preLogger: true
+                  postLogger: true
+            routes:
+      ```
+
+3. test
+   - ![](images/2-04-GlobalFilterTest.png)
+
+### Custom Filter(Logging)
+
+1. Step8) Logging Filter – LoggingFilter.java1
+
+      ```java
+      @Component
+      @Slf4j
+      public class LoggingFilter extends AbstractGatewayFilterFactory<LoggingFilter.Config> {
+          public LoggingFilter() {
+              super(Config.class);
+          }
+      
+          @Override
+          public GatewayFilter apply(Config config) {
+              return ((exchange, chain) -> {
+                  ServerHttpRequest request = exchange.getRequest();
+                  ServerHttpResponse response = exchange.getResponse();
+      
+                  log.info("Global Filter baseMessage: {}", config.getBaseMessage());
+                  if (config.isPreLogger()) {
+                      log.info("Global Filter Start: request id -> {}", request.getId());
+                  }
+                  return chain.filter(exchange).then(Mono.fromRunnable(()->{
+                      if (config.isPostLogger()) {
+                          log.info("Global Filter End: response code -> {}", response.getStatusCode());
+                      }
+                  }));
+              });
+          }
+      
+          @Data
+          public static class Config {
+              private String baseMessage;
+              private boolean preLogger;
+              private boolean postLogger;
+          }
+      }
+      ```
+2. Logging Filter – application.yml
+   - ![](images/2-4-LoggingFilterConfig.png)
+      ```yaml
+              - id: second-service
+                uri: http://localhost:8082
+                predicates:
+                  - Path=/second-service/**
+                filters:
+                  - name: CustomFilter
+                  - name: LoggingFilter
+                    args:
+                      baseMessage: Hi, there.
+                      preLogger: true
+                      postLogger: true
+      ```
+
+3. Test
+   - ![](images/2-4-LoggingFilterTestResult.png)
+
 ## 5. Spring Cloud Gateway – Eureka 연동
+Eureka 연동 흐름
+- ![](images/2-4-EurekaLinkage.png)
+
+1. Step1) Eureka Client 추가 – pom.xml, application.yml
+   - Spring Cloud Gateway, First Service, Second Service
+   - pom.xml에  "eureka-client"추가
+   - application.yaml 변경
+
+      ```xml
+      eureka:
+        client:
+          register-with-eureka: true
+          fetch-registry: true
+          service-url:
+            defaultZone: http://localhost:8761/eureka
+      ```
+      
+      ```yaml
+      <dependency>
+         <groupId>org.springframework.cloud</groupId>
+         <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      </dependency>
+      ```
+2. Eureka Client 추가 –application.yml
+
+      ```xml
+                  routes:
+                    - id: first-service
+            #          uri: http://localhost:8081
+                      uri: lb://MY-FIRST-SERVICE      #Eureka 연동(대문자)
+            
+      ```
+3. Step3) Eureka Server – Service 등록 확인
+   - Spring Cloud Gateway, First Service, Second Service
+   - ![](images/2-4-EurekaInstances.png)
+
+4. 테스트
+   - http://127.0.0.1:8000/first-service/welcome
 
 ## 6. Spring Cloud Gateway – Load Balancer
+### Load Balancer
+Step4) First Service, Second Service를 각각 2개씩 기동
 
+1. runconfigration 설정
+   - 3가지 방법                    
+      ```shell
+      1) VM Options à -Dserver.port=[다른포트]
+      2) $ mvn spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=9003'
+      3) $ mvn clean compile package
+      $ java -jar -Dserver.port=9004 ./target/user-service-0.0.1-SNAPSHOT.jar
+      ```
+2. 테스트
+   - http://127.0.0.1:8000/first-service/welcome
+   - 2개의 서버로 Loanbalcer가 되는지 확인
 
-```yaml
-Netflix Zuul 구현
-§ Step2) First Service, Second Service
-Netflix Zuul 구현
-§ Step3) Test
-Netflix Zuul 구현
-§ Step4) Zuul Service
-- Spring Boot: 2.3.8
-- Dependencies: Lombok, Spring Web, Zuul
-Netflix Zuul 구현
-§ Step5) Zuul Service
-Netflix Zuul 구현
-§ Step6) ZuulFilter
-Spring Cloud Gateway – 기본
-§ Step1) Dependencies
-- DevTools, Eureka Discovery Client, Gateway
-§ Step2) application.properties (or application.yml)
-Spring Cloud Gateway – 기본
-§ Step3) Test
-Spring Cloud Gateway – 기본
-Pre
-dica
-te
-Spring Cloud Gateway – Filter
-First Service
-Second Service
-Client Spring Cloud gateway
-Gateway
-Handler
-Mapping
-Predicate
-Pre
-dica
-te
-Pre Filter
-Post Filter
-Request
-Response
-§ Property
-§ Java Code
-Spring Cloud Gateway – Filter
-§ Step4) Filter using Java Code – FilterConfig.java
-Spring Cloud Gateway – Filter
-§ Step4) Filter using Java Code – FirstServiceController.java, SecondServiceController.java
-Spring Cloud Gateway – Filter
-§ Step4) Test
-Spring Cloud Gateway – Filter
-§ Step5) Filter using Property – application.yml
-Spring Cloud Gateway – Filter
-§ Step5) Test
-Spring Cloud Gateway – Custom Filter
-§ Step6) Custom Filter – CustomFilter.java
-Spring Cloud Gateway – Custom Filter
-§ Step6) Custom Filter – application.yml
-Spring Cloud Gateway – Custom Filter
-§ Step6) Custom Filter – FirstServiceController.java, SecondServiceController.java
-Spring Cloud Gateway – Global Filter
-§ Step7) Global Filter – GlobalFilter.java
-Spring Cloud Gateway – Global Filter
-§ Step7) Global Filter – application.yml
-Spring Cloud Gateway – Global Filter
-§ Step7) Global Filter – Test
-Spring Cloud Gateway – Custom Filter (Logging)
-§ Step8) Logging Filter – LoggingFilter.java
-Spring Cloud Gateway – Custom Filter (Logging)
-§ Step8) Logging Filter – application.yml
-Spring Cloud Gateway – Custom Filter (Logging)
-§ Step8) Logging Filter – Test
-Gateway
-Client
-Gateway
-Handler
-Global
-Filter
-Custom
-Filter
-Logging
-Filter
-Proxied
-Service
-Spring Cloud Gateway – Eureka 연동
-FIRST SERVICE
-INSTANCE A
-API Gateway
-Eureka Server: Service Discovery, Registration
-SECOND SERVICE
-http://127.0.0.1:8000/first-service/welcome INSTANCE A
-http://127.0.0.1:8000/second-service/welcome
-1)
-2)
-3)
-3)
-http://127.0.0.1:8082/second-service/welcome
-http://127.0.0.1:8081/first-service/welcome
-second-service/welcome
-Spring Cloud Gateway – Eureka 연동
-§ Step1) Eureka Client 추가 – pom.xml, application.yml
-- Spring Cloud Gateway, First Service, Second Service
-Spring Cloud Gateway – Eureka 연동
-§ Step2) Eureka Client 추가 –application.yml
-- Spring Cloud Gateway
-Spring Cloud Gateway – Eureka 연동
-§ Step3) Eureka Server – Service 등록 확인
-- Spring Cloud Gateway, First Service, Second Service
-Spring Cloud Gateway – Load Balancer
-§ Step4) First Service, Second Service를 각각 2개씩 기동
-2) $ mvn spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=9003'
-3) $ mvn clean compile package
-$ java -jar -Dserver.port=9004 ./target/user-service-0.0.1-SNAPSHOT.jar
-1) VM Options à -Dserver.port=[다른포트]
-Spring Cloud Gateway – Load Balancer
-§ Step5) Eureka Server – Service 등록 확인
-- Spring Cloud Gateway, First Service, Second Service
-Spring Cloud Gateway – Load Balancer
-§ Step6) Random port 사용
-- Spring Cloud Gateway, First Service, Second Service
-Spring Cloud Gateway – Load Balancer
-§ Step6) Post 확인 – FirstController.java
-Spring Cloud Gateway – Load Balancer
-§ Step6) Random port 사용
-- Spring Cloud Gateway, First Service, Second Service
-```
+### Step6) Random port 사용
+Spring Cloud Gateway, First Service, Second Service
+        
+1. Application.yaml
+
+      ```yaml
+      server:
+      #  port: 8081
+        port: 0
+      #  port: ${random.int(10000,51000)}
+      
+      spring:
+        application:
+          name: my-first-service
+      
+      eureka:
+        client:
+           ...
+        instance:
+          instance-id: ${spring.cloud.client.ip-address}:${spring.application.instance_id:${random.value}}
+          prefer-ip-address: true
+      ```
+2. Step6) Post 확인 – FirstController.java
+   - ![](images/2-4-PortLog.png)
