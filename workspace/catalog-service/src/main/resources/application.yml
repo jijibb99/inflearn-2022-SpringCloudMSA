@@ -1,0 +1,37 @@
+server:
+  port: 8082     # 임시(최종 시점에 0으로 변경
+
+spring:
+  application:
+    name: catalog-service
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    generate-ddl: true
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password: 1234
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+#여기서 처음 언급됨
+logging:
+  level:
+    com.example.catalogservice: DEBUG
