@@ -110,7 +110,7 @@ API Gateway Service 주요 기능
     http://192.168.43.50:2203/welcome
     ```         
 ### Step4) Zuul Service (skip)
-- Spring Boot: 2.3.8
+- Spring Boot: 2.3.8  (2.4에서는 서비스 되지 않음) 
 - Dependencies: Lombok, Spring Web, Zuul
 ```note
 Spring boot 2.4.X부터는 zuul, hystrix가 더 이상 제공되지 않습니다.
@@ -148,6 +148,7 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
    - ![](images/02-2-DefaultGatewayTest.png)
 ``
 ## 4. Spring Cloud Gateway – Filter
+![](images/2-3-flow.png)
 - 기본 필터(프로그램 기반)
 - Filter using Property
 - Custom filter
@@ -159,8 +160,21 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
 1. FilterConfig.java
    - Step4) Filter using Java Code – FilterConfig.java
 
+
       ```java
-      @Configuration
+      초안..... 
+      import java.beans.BeanProperty;
+      
+      @Bean
+      public RouteLocator gatewayRoutes(RouteLocarterBuilder builder) {
+          return builder.routes()
+              .route()
+              .build()
+      }
+      ```
+
+      ```java
+      @Configuration # Spring 기동시 해당 bean을 등록한다
       public class FilterConfig {
           @Bean
           public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
@@ -192,6 +206,10 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
            return "Hello World in First Service.";
        }
        ```
+   - 추가 수정 (application.yaml의 routes 관련 설정 제거)
+     - ![](images/2-02-ConfigRouteDelete.png)
+
+
 3. 테스트
    - ![](images/2-4Step4Test.png)
 
@@ -217,6 +235,7 @@ Step5) Filter using Property – application.yml
       ```
 
 2. 테스트
+   - postman으로 테스트
    - http://127.0.0.1:8000/first-service/message
    - ![](images/2-4-ConfigFilterTest.png)
 
@@ -276,6 +295,8 @@ Step5) Filter using Property – application.yml
 
 
 ### Global Filter
+공통적인 필터
+- 특정 Route와 무관
 1. Step7) Global Filter – GlobalFilter.java
 
       ```java
@@ -304,7 +325,7 @@ Step5) Filter using Property – application.yml
               });
           }
       
-          @Data
+          @Data    //lombok
           public static class Config {
               private String baseMessage;
               private boolean preLogger;
@@ -332,7 +353,7 @@ Step5) Filter using Property – application.yml
 ### Custom Filter(Logging)
 
 1. Step8) Logging Filter – LoggingFilter.java1
-
+   
       ```java
       @Component
       @Slf4j
@@ -343,20 +364,22 @@ Step5) Filter using Property – application.yml
       
           @Override
           public GatewayFilter apply(Config config) {
-              return ((exchange, chain) -> {
+              GatewayFilter filter = new OrderedGatewayFilter((exchange, chain) -> {
                   ServerHttpRequest request = exchange.getRequest();
                   ServerHttpResponse response = exchange.getResponse();
       
-                  log.info("Global Filter baseMessage: {}", config.getBaseMessage());
+                  log.info("Logging Filter baseMessage: {}", config.getBaseMessage());
                   if (config.isPreLogger()) {
-                      log.info("Global Filter Start: request id -> {}", request.getId());
+                      log.info("Logging PRE Filter: request id -> {}", request.getId());
                   }
                   return chain.filter(exchange).then(Mono.fromRunnable(()->{
                       if (config.isPostLogger()) {
-                          log.info("Global Filter End: response code -> {}", response.getStatusCode());
+                          log.info("Logging POST Filter: response code -> {}", response.getStatusCode());
                       }
                   }));
-              });
+              }, Ordered.LOWEST_PRECEDENCE);
+      
+              return filter;
           }
       
           @Data
@@ -367,6 +390,7 @@ Step5) Filter using Property – application.yml
           }
       }
       ```
+
 2. Logging Filter – application.yml
    - ![](images/2-4-LoggingFilterConfig.png)
       ```yaml
@@ -433,10 +457,10 @@ Step4) First Service, Second Service를 각각 2개씩 기동
 1. runconfigration 설정
    - 3가지 방법                    
       ```shell
-      1) VM Options à -Dserver.port=[다른포트]
+      1) VM Options : -Dserver.port=[다른포트]
       2) $ mvn spring-boot:run -Dspring-boot.run.jvmArguments='-Dserver.port=9003'
       3) $ mvn clean compile package
-      $ java -jar -Dserver.port=9004 ./target/user-service-0.0.1-SNAPSHOT.jar
+         $ java -jar -Dserver.port=9004 ./target/user-service-0.0.1-SNAPSHOT.jar
       ```
 2. 테스트
    - http://127.0.0.1:8000/first-service/welcome
@@ -444,6 +468,8 @@ Step4) First Service, Second Service를 각각 2개씩 기동
 
 ### Step6) Random port 사용
 Spring Cloud Gateway, First Service, Second Service
+- ramdom port를 사용해도 Eureka는 포트 번호'0'으로만 기록됨
+- 그래서 instance id를 별도로 부여해서 여러개 기동 가능하도록 수정 필요ㅕ
         
 1. Application.yaml
 
@@ -466,3 +492,11 @@ Spring Cloud Gateway, First Service, Second Service
       ```
 2. Step6) Post 확인 – FirstController.java
    - ![](images/2-4-PortLog.png)
+
+
+## Z.기타
+
+1. 파일 찾기
+```shell
+shift + shift --> 검색창 열림
+```

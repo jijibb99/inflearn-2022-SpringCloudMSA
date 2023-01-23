@@ -20,6 +20,11 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+
         - id: first-service
 #          uri: http://localhost:8081
           uri: lb://MY-FIRST-SERVICE      #Eureka 연동(대문자)
@@ -45,3 +50,5 @@ spring:
                 baseMessage: Hi, there.
                 preLogger: true
                 postLogger: true
+
+
