@@ -224,8 +224,15 @@ APIs
     }
     ```
 
+<<<<<<< HEAD
 3. OrderDto.java, ResponseOrder.java
 
+=======
+
+3. OrderDto.java, ResponseOrder.java
+
+
+>>>>>>> origin/main
     ```java
     @Data
     public class OrderDto implements Serializable {
@@ -247,6 +254,7 @@ APIs
     }
     ```
 
+<<<<<<< HEAD
 4. OrderService.java, OrderServiceImpl.java
 
 5. OrderController.java
@@ -276,7 +284,47 @@ APIs
           - Path=/order-service/**
     ```
 7. 테스트
+=======
+4. OrderService
+
+
+```java
+
+```
+
+5. 테스트
+>>>>>>> origin/main
    - ![](images/5-2-TestResult.png) 
    - 상품 주문
      - POST : http://127.0.0.1:8000/order-service/{user_id}/orders
 
+<<<<<<< HEAD
+=======
+
+
+
+Orders Microservice 추가
+§ 프로젝트 생성
+
+Orders Microservice 추가
+§ OrderEntity.java, OrderRepository.java
+Orders Microservice 추가
+§ OrderDto.java, ResponseOrder.java
+Orders Microservice 추가
+§ OrderService.java, OrderServiceImpl.java
+Orders Microservice 추가
+§ OrderController.java
+Orders Microservice 추가
+§ OrderController.java
+Orders Microservice 추가
+§ API Gatewway Service에 Service 등록
+§ Test
+Orders Microservice 추가
+§ Test
+
+Orders Microservice 추가
+§ Test
+• 상품 주문 조회
+- GET à http://127.0.0.1:8000/order-service/{user_id}/orders
+```
+>>>>>>> origin/main
