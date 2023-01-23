@@ -224,15 +224,9 @@ APIs
     }
     ```
 
-<<<<<<< HEAD
-3. OrderDto.java, ResponseOrder.java
-
-=======
-
 3. OrderDto.java, ResponseOrder.java
 
 
->>>>>>> origin/main
     ```java
     @Data
     public class OrderDto implements Serializable {
@@ -254,7 +248,6 @@ APIs
     }
     ```
 
-<<<<<<< HEAD
 4. OrderService.java, OrderServiceImpl.java
 
 5. OrderController.java
