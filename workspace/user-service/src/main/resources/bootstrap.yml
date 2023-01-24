@@ -1,0 +1,6 @@
+spring:
+  cloud.config:
+    uri: http://10.200.0.1:8012
+    name: ecommerce
+  profiles:
+    active: dev

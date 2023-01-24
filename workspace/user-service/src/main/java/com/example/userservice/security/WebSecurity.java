@@ -31,6 +31,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.info("WebSecurity.configure()");
         http.csrf().disable();
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
 //        http.authorizeRequests().antMatchers("/users/**").permitAll();     // "/users/**"는 모든 사용자에게 권한 부여
         // 이 부분이 없으면 h2-conolse과 같이 frame기반은 서비스 되지 않음
 
@@ -38,7 +39,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 //                .hasIpAddress(env.getProperty("gateway.ip")) // <- IP 변경
 //                .hasIpAddress("127.0.0.1") // <- IP 변경  (직접은 되는데, Eureka를 경유하면 오류)
 //                .hasIpAddress("10.200.0.1")
-                .hasIpAddress("192.168.0.15")
+                .hasIpAddress(env.getProperty("gateway.ip"))
                 .and()
                 .addFilter(getAuthenticationFilter());   //아래 메소드
         http.headers().frameOptions().disable();

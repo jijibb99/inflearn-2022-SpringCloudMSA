@@ -1,0 +1,20 @@
+ D 드라이브의 볼륨: DATA
+ 볼륨 일련 번호: 0A91-21E5
+
+ d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\workspace 디렉터리
+
+2023-01-25  오전 07:51    <DIR>          .
+2023-01-25  오전 07:51    <DIR>          ..
+2023-01-25  오전 05:42    <DIR>          .idea
+2023-01-24  오후 10:55    <DIR>          apigateway-service
+2023-01-24  오후 10:36    <DIR>          catalog-service
+2023-01-24  오후 10:36    <DIR>          discoveryservice
+2023-01-25  오전 07:51                 0 ecommerce.yml
+2023-01-24  오후 10:36    <DIR>          ecoomerc
+2023-01-24  오후 10:36    <DIR>          first-service
+2023-01-24  오후 10:36    <DIR>          order-service
+2023-01-24  오후 10:36    <DIR>          second-service
+2023-01-24  오후 10:36    <DIR>          user-service
+2023-01-24  오후 10:36    <DIR>          zuul-service
+               1개 파일                   0 바이트
+              12개 디렉터리  89,483,051,008 바이트 남음
