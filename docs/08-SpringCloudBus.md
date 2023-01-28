@@ -18,13 +18,10 @@
 - 분산 시스템의 노드를 경량 메시지 브로커와 연결
 - 상태 및 구성에 대한 변경 사항을 연결된 노드에게 전달(Broadcast)
 
-AMQP
-- (Advanced Message Queuing Protocol)
 
 AMQP (Advanced Message Queuing Protocol), 메시지 지향 미들웨어를 위한 개방형 표준 응용 계층 프로토콜
 - 메시지 지향, 큐잉, 라우팅 (P2P, Publisher-Subcriber), 신뢰성, 보안
 - Erlang, RabbitMQ에서 사용
-
 
 Kafka 프로젝트
 - Apache Software Foundation이 Scalar 언어로 개발한 오픈 소스 메시지 브로커 프로젝트
@@ -81,13 +78,74 @@ Management Plugin 설치
 - PC restart
 - http://127.0.0.1:15672/
   - guest/guest
-
+- RabbitMQ를 docker로 대체 검토
 
 
 
 ## 3. 프로젝트 수정 – Actuator 추가
-## 4. 테스트
 
+1. Dependencies 추가
+   - Config Server
+     - AMQP for Spring Cloud Bus, Actuator
+   - Users Microservice, Gateway Service
+     - AMQP for Spring Cloud Bus
+
+2. application.yml 수정
+   - Config Server, Users Microservice, Gateway Service
+     - Spring Cloud 2020.0.0에서 bus-env ==> busenv, bus-refresh ==> busrefresh
+     - rabbitmq 추가,  management에 "busrefresh" 추가
+
+          ```shell
+          spring:
+            application:
+              name: config-service
+            rabbitmq:
+              host: 127.0.0.1
+              port: 5672
+              username: guest
+              password: guest
+          ...    
+              
+          management:
+            endpoints:
+              web:
+                exposure:
+                  include: health, busrefresh    
+          ```
+
+## 4. 테스트
+1. 테스트 순서
+    ```shell
+    1) Start RabbitMQ Server
+    2) Start Spring Cloud Config Service
+    3) Start Eureka Discovery Service
+    4) Start Spring Cloud Gateway Service
+    5) Strat Users Microservice
+    ```
+
+2. 테스트
+
+
+```shell
+사용자 생성
+로그인
+설정 수정
+http://127.0.0.1:8000/user-service/actuator/busrefresh
+```
+
+5. 1
+
+
+```shell
+
+```
+
+6. 1
+
+
+```shell
+
+```
 ```shell
 
 Spring Cloud Bus

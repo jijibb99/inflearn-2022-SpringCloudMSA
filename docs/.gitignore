@@ -1,0 +1,11 @@
+# Other files and folders
+.settings/
+jenkins_SHARE/
+
+# Executables
+*.jar
+*.class
+
+#docker 공유폴더
+.idea/
+_build/

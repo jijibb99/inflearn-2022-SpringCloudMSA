@@ -112,10 +112,11 @@ API Gateway Service 주요 기능
 ### Step4) Zuul Service (skip)
 - Spring Boot: 2.3.8  (2.4에서는 서비스 되지 않음) 
 - Dependencies: Lombok, Spring Web, Zuul
-```note
-Spring boot 2.4.X부터는 zuul, hystrix가 더 이상 제공되지 않습니다.
-Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 Spring cloud gateway입니다.
-```
+
+   ```{note}
+   Spring boot 2.4.X부터는 zuul, hystrix가 더 이상 제공되지 않습니다.
+   Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 Spring cloud gateway입니다.
+   ```
 
 
 ## 3. Spring Cloud Gateway – 기본
@@ -159,10 +160,9 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
 ###  기본 필터(프로그램 기반)
 1. FilterConfig.java
    - Step4) Filter using Java Code – FilterConfig.java
-
-
+      
       ```java
-      초안..... 
+      //초안..... 
       import java.beans.BeanProperty;
       
       @Bean
@@ -213,9 +213,6 @@ Spring cloud 커뮤니티에서 zuul 대신 권고하고 있는 API Gateway가 S
 3. 테스트
    - ![](images/2-4Step4Test.png)
 
-```shell
-
-```
 
 ###  Filter using Property
 Step5) Filter using Property – application.yml

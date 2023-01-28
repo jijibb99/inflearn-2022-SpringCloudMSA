@@ -1,9 +1,14 @@
 server:
-  port: 8888
+  port: 8012
 
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   profiles:
     active: native
   cloud:
@@ -16,7 +21,7 @@ spring:
 #          username: [username]
 #          password: [password]
         native:
-          search-locations: file:///Users/dowonlee/Desktop/Work/native-file-repo
+          search-locations: file:///d:/APP/@inflearn/inflearn-2022-SpringCloudMSA/native-file-repo
 
 management:
   endpoints:

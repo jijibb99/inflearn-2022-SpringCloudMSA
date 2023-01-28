@@ -310,6 +310,10 @@ Actuator을 통하여 적용하기
 - 설정 정보를 nativve로 설정하고
   -  native.search-locations  설정
 
+- 강사의 해당 디렉토리에 있는 파일명
+  - application.yml
+  - ecommerce.yml
+  - user-service.yml
 ```yaml
   cloud:
     config:
@@ -324,3 +328,13 @@ Actuator을 통하여 적용하기
           search-locations: file:///Users/dowonlee/Desktop/Work/native-file-repo
 ```
 
+테스트
+```shell
+http://127.0.0.1:8012/user-service/native
+- file:d:\\APP\\@inflearn\\inflearn-2022-SpringCloudMSA\\native-file-repo\\user-service.yml,
+- file:d:\\APP\\@inflearn\\inflearn-2022-SpringCloudMSA\\native-file-repo\\application.yml,
+
+http://127.0.0.1:8012/ecommerce/native
+-  native-file-repo\\ecommerce.yml,
+-  native-file-repo\\application.yml
+```
