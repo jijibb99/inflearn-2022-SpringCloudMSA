@@ -1,8 +1,6 @@
 encrypt:
 #  key: abcdefghijklmnopqrstuvwxyz0123456789
   key-store:
-    location: file://${user.home}/Desktop/Work/keystore/apiEncryptionKey.jks
-#    location: file:/apiEncryptionKey.jks
-#    location: file:///apiEncryptionKey.jks
-    password: test1234
+    location: file:///d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\keystore\apiEncryptionKey.jks
+    password: 1q2w3e4r
     alias: apiEncryptionKey
