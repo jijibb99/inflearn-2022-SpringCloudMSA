@@ -32,6 +32,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         log.info("WebSecurity.configure()");
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/actuator/**").permitAll();
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 //        http.authorizeRequests().antMatchers("/users/**").permitAll();     // "/users/**"는 모든 사용자에게 권한 부여
         // 이 부분이 없으면 h2-conolse과 같이 frame기반은 서비스 되지 않음
 

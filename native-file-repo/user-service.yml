@@ -1,5 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    # 1234를 암호화 해서 적용
+    password: '{cipher}AQA8wJ+i5VczT9OjclqUEhLVe3EuNC1baknHyQDR1xz0yr0JYyLvtfeGn2hc81CazIvIsPJPiWhX2Eaf3c+TWjEgkAEk7eWStac0oZ8wCcreNK2RPeTr3Rw7tOqwTOCNTRrUVcNBmYDH19moFC6j+FPnLGTcO0ehEim4SVeOsWNQw+SsU8yUbolmkSkmRBmRAqsaFwkBITn2f9VF/O5309hhfh1/WgK6ULztH7YekeHEVw+3lzXBrz42V9mV/amG8r1tXmcmO4zTstQw1lUL0vUH8PABl8SYIaZx5tTFzo5pqIaOqPwlKfohIw9QrLdqO/ewHWCqAEOA3nP4AxB3ADskIue2TWzI1RhOIrIKp5cjjPz82hEbrvyMBNXIZZhGstc='
+    
 token:
   expiration_time: 90000000
-  secret: user_token_userservice_native
-gateway.ip: 10.200.0.1  
-
+#  secret: user_token_ecommerce_native_mod
+  secret: '{cipher}AQCCysng0zOMsBxhwU9wEOx8IJGiAdr8Efk+s0oWVnbH1e3jjMS8mbCYXAbtXnzmwdGgcMQbFhRBTzsAdfixFWhiakoXEQeBPutrbp2vcalfoe39ViZdiLiRXgXY6MGGtv8qI9oxyO5FVnTdkbOHufU3JQVBJB57EY8wJ1kP+j7WOePY4i9sMPsP3wnQ7nQQ9Yv45mMlyhHtW9CbqaldrR8Ff6wNGEcpuJ2ghK2MG56xTHMi3wuz+dUiPRQO3BH6Ew+UCm9vWcfyVGKTZl5CesP0nykshJmLoJ/4RMgeIG4QUs/UZecr3KgU2VJsOB6U0NXHWk6GT0jWa6IFGKbDUZd6n8wzSOcGY1ZdvL35ooOJxkRXv4tTVw7ARd8hdLcklb/DkhqwZ+tlmRJFOPDDioi0'
+gateway.ip: 10.200.0.1      
