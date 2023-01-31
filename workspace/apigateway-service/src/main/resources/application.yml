@@ -29,10 +29,6 @@ spring:
             preLogger: true
             postLogger: true
       routes:
-#        - id: user-service
-#          uri: lb://USER-SERVICE
-#          predicates:
-#            - Path=/user-service/**
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -93,25 +89,25 @@ spring:
           predicates:
             - Path=/first-service/**
 #yaml을 이용한 필터 추가하기
-          filters:
+#          filters:
 #            - AddRequestHeader=first-request, first-request-header2
 #            - AddResponseHeader=first-response, first-response-header2
-            - CustomFilter
+#            - CustomFilter
 
         - id: second-service
 #          uri: http://localhost:8082
           uri: lb://MY-SECOND-SERVICE     #Eureka 연동(대문자)
           predicates:
             - Path=/second-service/**
-          filters:
+#          filters:
 #            - AddRequestHeader=second-request, second-request-header2
 #            - AddResponseHeader=second-response, second-response-header2
-            - name: CustomFilter
-            - name: LoggingFilter
-              args:
-                baseMessage: Hi, there.
-                preLogger: true
-                postLogger: true
+#            - name: CustomFilter
+#            - name: LoggingFilter
+#              args:
+#                baseMessage: Hi, there.
+#                preLogger: true
+#                postLogger: true
 
 #token:
 #  expiration_time:  86400000

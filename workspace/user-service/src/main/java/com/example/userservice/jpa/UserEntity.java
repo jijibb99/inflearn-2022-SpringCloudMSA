@@ -13,8 +13,7 @@ public class UserEntity {
     @GeneratedValue
     private Long id;
 
-//    @Column(nullable = false, length = 50, unique = true)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, unique = true)
     private String email;
     @Column(nullable = false, length = 50)
     private String name;

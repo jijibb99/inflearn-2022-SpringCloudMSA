@@ -38,6 +38,8 @@ greeting:
 
 logging:
   level:
+# Feign Client 용
+    com.example.userservice.client: DEBUG
     com.example.userservice: DEBUG
 
 management:
@@ -46,6 +48,6 @@ management:
       exposure:
         include: refresh, health, beans, httptrace, busrefresh
 
-token:
+#token:
 #  expiration_time:  86400000
 #  secret:  user_token

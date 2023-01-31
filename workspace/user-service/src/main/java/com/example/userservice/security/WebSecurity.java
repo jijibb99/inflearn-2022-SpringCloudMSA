@@ -35,7 +35,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
 //        http.authorizeRequests().antMatchers("/users/**").permitAll();     // "/users/**"는 모든 사용자에게 권한 부여
         // 이 부분이 없으면 h2-conolse과 같이 frame기반은 서비스 되지 않음
-
+        log.info("env.getProperty(\"gateway.ip\") = {}", env.getProperty("gateway.ip"));
         http.authorizeRequests().antMatchers("/**")
 //                .hasIpAddress(env.getProperty("gateway.ip")) // <- IP 변경
 //                .hasIpAddress("127.0.0.1") // <- IP 변경  (직접은 되는데, Eureka를 경유하면 오류)

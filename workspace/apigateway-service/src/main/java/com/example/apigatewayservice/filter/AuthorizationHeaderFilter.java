@@ -30,10 +30,12 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     // login --> token --> user(with token) --> header
     @Override
     public GatewayFilter apply(Config config) {
+        log.info("AuthorizationHeaderFilter.apply");
         return (exchange, chain) -> {
             ServerHttpRequest request = exchange.getRequest();
 
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+                log.info("AuthorizationHeaderFilter.apply() --> No authorization header");
                 return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
 
@@ -68,10 +70,13 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         String subject = null;
 
         try {
+            log.info("token.secret = {}", env.getProperty("token.secret"));
             subject = Jwts.parser().setSigningKey(env.getProperty("token.secret"))
                     .parseClaimsJws(jwt).getBody()
                     .getSubject();
+            log.info("subject: {}", subject);
         } catch (Exception ex) {
+            log.error("Error",ex);
             returnValue = false;
         }
 
