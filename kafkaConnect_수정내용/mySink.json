@@ -1,0 +1,14 @@
+{                                                                                         
+	"name" : "my-sink-connect",                                                         
+	"config" : {                                                                          
+		"connector.class" : "io.confluent.connect.jdbc.JdbcSinkConnector",              
+		"connection.url" : "jdbc:mysql://localhost:3306/sampleb?useUnicode=true&serverTimezone=Asia/Seoul",		
+		"connection.user" : "user",                                                       
+		"connection.password" : "pwd",                                                    
+		"auto.create" : "true",
+		"auto.evolve" : "true",
+		"delete.enabled" : "false",
+		"tasks.max" : "1",                                                                 
+		"topics" : "my_topicusers"                                                      
+	}                                                                                     
+}

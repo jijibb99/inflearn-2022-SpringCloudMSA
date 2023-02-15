@@ -1,0 +1,14 @@
+{                                                                                         
+	"name" : "my-source-connect",                                                         
+	"config" : {                                                                          
+		"connector.class" : "io.confluent.connect.jdbc.JdbcSourceConnector",              
+		"connection.url" : "jdbc:mysql://localhost:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul",		
+		"connection.user" : "user",                                                       
+		"connection.password" : "pwd",                                                    
+		"mode" : "incrementing",                                                          
+		"incrementing.column.name" : "id",                                                
+		"table.whitelist": "users",                                                       
+		"topic.prefix" : "my_topic",                                                      
+		"tasks.max" : "1"                                                                 
+	}                                                                                     
+}
