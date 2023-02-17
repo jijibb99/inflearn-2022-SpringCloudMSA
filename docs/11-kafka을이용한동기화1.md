@@ -210,18 +210,18 @@ Ecosystem ② - Kafka Connect
    - my.json   (d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\kafkaConnect\confluent-6.1.0\)
 
     ```shell
-    {                                                                                         
+    {                                                                                     
       "name" : "my-source-connect1",                                                         
       "config" : {                                                                          
-        "connector.class" : "io.confluent.connect.jdbc.JdbcSourceConnector",              
+        "connector.class" : "io.confluent.connect.jdbc.JdbcSourceConnector",
         "connection.url" : "jdbc:mysql://localhost:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul",                         
-        "connection.user" : "user",                                                       
-        "connection.password" : "pwd",                                                    
-        "mode" : "incrementing",                                                          
-        "incrementing.column.name" : "id",                                                
-        "table.whitelist": "test",                                                       
-        "topic.prefix" : "my_topic",                                                      
-        "tasks.max" : "1"                                                                 
+        "connection.user" : "user",
+        "connection.password" : "pwd",    
+        "mode" : "incrementing",    
+        "incrementing.column.name" : "id",    
+        "table.whitelist": "test", 
+        "topic.prefix" : "my_topic",
+        "tasks.max" : "1" 
       }                                                                                     
     }
     ```
