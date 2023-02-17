@@ -10,7 +10,9 @@ token:
   expiration_time: 90000000
 #  secret: user_token_ecommerce_native_mod
   secret: '{cipher}AQCCysng0zOMsBxhwU9wEOx8IJGiAdr8Efk+s0oWVnbH1e3jjMS8mbCYXAbtXnzmwdGgcMQbFhRBTzsAdfixFWhiakoXEQeBPutrbp2vcalfoe39ViZdiLiRXgXY6MGGtv8qI9oxyO5FVnTdkbOHufU3JQVBJB57EY8wJ1kP+j7WOePY4i9sMPsP3wnQ7nQQ9Yv45mMlyhHtW9CbqaldrR8Ff6wNGEcpuJ2ghK2MG56xTHMi3wuz+dUiPRQO3BH6Ew+UCm9vWcfyVGKTZl5CesP0nykshJmLoJ/4RMgeIG4QUs/UZecr3KgU2VJsOB6U0NXHWk6GT0jWa6IFGKbDUZd6n8wzSOcGY1ZdvL35ooOJxkRXv4tTVw7ARd8hdLcklb/DkhqwZ+tlmRJFOPDDioi0'
-gateway.ip: 10.200.0.1      
+gateway.ip: 10.200.0.1 
+#gateway.ip: 192.168.0.17 
+    
 
 #RestTemplate를 위하여 추가
 order_service:
