@@ -90,7 +90,17 @@
             <artifactId>spring-cloud-starter-zipkin</artifactId>
             <version>2.2.3.RELEASE</version>
         </dependency>
+        <!-- 이 부분이 없으면 uactuator/prometheus  조회가 안됨-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        
     </dependencies>
     <dependencyManagement>
         <dependencies>
