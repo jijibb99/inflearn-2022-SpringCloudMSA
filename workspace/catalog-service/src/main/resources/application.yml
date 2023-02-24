@@ -35,3 +35,8 @@ eureka:
 logging:
   level:
     com.example.catalogservice: DEBUG
+
+#kafka 서버 정보
+user:
+  KafkaProducerConfig:
+    BOOTSTRAP_SERVERS_CONFIG: 10.200.0.1:9092

@@ -23,10 +23,10 @@ spring:
   datasource:
 #    driver-class-name: org.h2.Driver
 #    url: jdbc:h2:mem:testdb
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mariadb://localhost:3306/mydb
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/order?useUnicode=true&serverTimezone=Asia/Seoul
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/mydb
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/order?useUnicode=true&serverTimezone=Asia/Seoul
     username: user
     password: pwd
 
@@ -49,3 +49,9 @@ management:
     web:
       exposure:
         include: refresh, health, beans, busrefresh, info, metrics, prometheus
+
+#kafka 서버 정보
+user:
+  KafkaProducerConfig:
+    BOOTSTRAP_SERVERS_CONFIG: 10.200.0.1:9092
+#    BOOTSTRAP_SERVERS_CONFIG: 172.19.0.101:9092
