@@ -1,0 +1,30 @@
+version: '2'
+
+#mysql을 위하여 추가함:
+volumes:
+  mysql-volume: {}
+
+services:
+   
+ # $ mysql -uroot -h127.0.0.1 -p
+  mysql:
+    container_name: mysql 
+    image: jcscom13/mysql:5.7
+    mem_limit: 550m
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_MULTIPLE_DATABASES=samplea, sampleb
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    command:  #한글관련 추가
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-uuser", "-ppwd", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
