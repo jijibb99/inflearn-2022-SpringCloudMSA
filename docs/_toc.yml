@@ -3,18 +3,26 @@
 format: jb-book
 root: intro
 parts:
-- caption: 강의정리
+- caption: SPringCloud and MSA
   chapters:
-#  - file: doc/A01-DevOps서버환경구성.md
-
   - file: 00-Microservice와SpringCloud소개.md
-  - file: 01-ServiceDiscovery.md
-  - file: 02-APIGatewayService.md
-  - file: 03-E_commerce.md
-  - file: 04-UsersMicroservice.md
-  - file: 05-Catalog_Orders.md
-  - file: 06-Login.md
-  - file: 07-ConfigServer.md
-  - file: 08-SpringCloudBus.md
-
+    sections:
+    - file: 01-ServiceDiscovery.md
+    - file: 02-APIGatewayService.md
+    - file: 03-E_commerce.md
+    - file: 04-UsersMicroservice.md
+    - file: 05-Catalog_Orders.md
+    - file: 06-Login.md
+    - file: 07-ConfigServer.md
+    - file: 08-SpringCloudBus.md
+    - file: 09-Encryption.md
+    - file: 10-SyncCall.md
+    - file: 11-kafka을이용한동기화1.md
+    - file: 12-kafka을이용한동기화2.md
+    - file: 13-분산추적.md
+    - file: 14-Micrometer.md
+    - file: 15-ContainerVirtual.md
+    - file: 16-ContainerDeploy.md
+  - file: A01-LinuxSetup.md
+  - file: A02-LinuxDockerCompose.md
 

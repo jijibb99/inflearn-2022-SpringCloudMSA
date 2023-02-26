@@ -68,13 +68,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
         log.info("env.getProperty(\"token.expiration_time\") ==> {}", env.getProperty("token.expiration_time"));
+        log.info("token.expiration_time= {}", env.getProperty("token.expiration_time"));
         String token =   Jwts.builder()
                 .setSubject(userDetails.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis() +
                         Long.parseLong(env.getProperty("token.expiration_time"))))
                 .signWith(SignatureAlgorithm.HS256, env.getProperty("token.secret"))
                 .compact();
-
+//        user_token_ecommerce_native_mod
         response.addHeader("token", token);
         response.addHeader("userId", userDetails.getUserId());
     }

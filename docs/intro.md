@@ -1,15 +1,13 @@
-# MSA-SpringCloud
+# SPring Cloud로 하는 MSA
+
+1. 인프런 강의 정리-완료
+2. 팀 개발 서버로 이관-완료
+3. Dcoker-Compose로 변경
+4. Sample 금융 소스로 변경
+5. Kubernetes 적용
 
 
-```{note}
-꼭 참조한 문서의 원천을 표시하자. (내가 참조한 문서)
-저작권등의 문제가 있음 ==> 외부 공유는 불가
-본인 참고용으로만 사용하자
-```
-
-2023-01 시작 (myinno)
-
-## 개요
+## 1. 인프런 강의 정리-완료
 
 Spring Cloud로 개발하는 마이크로서비스 애플리케이션(MSA)
 
@@ -20,7 +18,4 @@ Spring Cloud로 개발하는 마이크로서비스 애플리케이션(MSA)
   - 前) JP Mogan Chase AMJ Tech consultant (일본)
   - 前) 삼성 SDS CMS 사업본부 책임 엔지니어
 
-<a class="reference internal" href="../../../index.html">
-     <H2>Main.돌아가기</H2>
-</a>
 

@@ -6,12 +6,12 @@
 }
 </style>
 
-# 기본 환경
+# 강의정리
 
-Microservice란?
-Microservice와 SOA
-Spring Cloud란?
-필수 SW 설치
+- Microservice란?
+- Microservice와 SOA
+- Spring Cloud란?
+- 필수 SW 설치
 
 ## 1. Microservice란?
 
