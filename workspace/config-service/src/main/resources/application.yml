@@ -1,3 +1,5 @@
+---
+spring.profiles: default
 server:
   port: 8888
 
@@ -6,17 +8,16 @@ spring:
     name: config-service
   rabbitmq:
     host: 127.0.0.1
-#    host: rabbitmq
     port: 5672
     username: guest
     password: guest
   profiles:
-    active: native
+    active: default
+#    active: native
   cloud:
     config:
       server:
         git:
-#          uri: file:///Users/dowonlee/Desktop/Work/git-local-repo
           uri: https://github.com/myinno/spring-cloud-config
 #          basedir: /Users/dowonlee/Desktop/Work/tmp/config-repo
 #          username: [username]
@@ -29,3 +30,26 @@ management:
     web:
       exposure:
         include: health, busrefresh
+
+---
+#Local Exec
+spring.profiles: local
+spring.profiles.active: native
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+
+---
+#Docker
+spring.profiles: docker
+spring.profiles.active: default
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest

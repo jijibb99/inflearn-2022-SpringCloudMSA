@@ -1,0 +1,17 @@
+version: '2'
+services:
+  config-service:
+    image: jcscom13/config-service:1.0
+    ports:
+      - "4111:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker default
+#    depends_on:
+#      - rabbitmq
+    networks:
+      my-network:
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network

@@ -1,15 +1,33 @@
+---
+spring.profiles: default
 server:
   port: 8761
 
 spring:
   application:
     name: discoveryservice
-  cloud:
-    config:
-      uri: http://127.0.0.1:8888
-      name: ecommerce
 
 eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+---
+#Local Exec
+spring.profiles: local
+
+spring:
+  cloud:
+    config:
+      uri: http://127.0.0.1:8888
+      name: ecommerce
+
+---
+#Docker
+spring.profiles: docker
+
+spring:
+  cloud:
+    config:
+      uri: http://config-service:8888
+      name: ecommerce

@@ -1,0 +1,21 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "4101:15672"
+      - "4102:5672"
+      - "4103:15671"
+      - "4104:5671"
+      - "4105:4369"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks: 
+      my-network:
+
+
+networks: 
+  my-network:
+    external: true
+    name: ecommerce-network

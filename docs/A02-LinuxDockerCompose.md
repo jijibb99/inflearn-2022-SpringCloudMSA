@@ -1,12 +1,12 @@
-# Linux 서버 기동
-팀 장비(inno3t2: 10.250.141.146)에서 기동
-- 이전과 동일 방바버으로 기동
-- DockerComposefh 변경
-- 원격에서 수행하기 위하야 Port Forward는 4100 ~ 4199번호 구간으로 매핑
+# DockerCompose로 통합
+각 환경별 설정이 상이한 부분은 하나의 yaml파일에서 profile로 구분
+- default모든 환경에 적용되는 내용
+- local, docker, k8s, aws로 구분하여 설정예정
+- 개별profile + default를 적용함
 
 ## 1. 네트워크 Mapping
 
-외부에서 접속용
+외부에서 접속용(변경 내용 없음)
 
 | 이름                | 기본 포트 | 설정한 포트 | URL                                             |
 |:------------------|:-----:|:------:|:------------------------------------------------|
@@ -24,30 +24,6 @@
 | Grafana           | 3000  |  4133  | http://inno3t2:4133/ <BR?admin/admin            |
 | user-service      | 8051  |  4151  | user-service debug(별도 확인 필요)                    |
 
-
-###  centos jdk 버전 변경
-
-1. yum 으로 설치 가능한 jdk 확인
-   ```shell
-   yum list java*jdk-devel
-   ```
-2. java-11-openjdk-devel.x86_64 설치
-   ```shell
-   yum install java-11-openjdk-devel.x86_64
-   ```
-3. JAVA_HOME 설정
-   ```shell
-   vi /etc/profile
-   
-   export JAVA_HOME=/lib/jvm/java-11-openjdk-11.0.10.0.9-1.el7_9.x86_64
-   
-   source /etc/profile
-   
-   echo $JAVA_HOME
-   
-   update-alternatives --config java
-   update-alternatives --config javac
-   ```
 
 ## 2. Centos에서 환경설정한 내용
 ### 2.1 RabbitMQ 
