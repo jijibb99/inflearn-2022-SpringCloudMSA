@@ -30,3 +30,4 @@ build/
 ### MYINNO  ###
 /kafkaConnect/
 /sw/
+/docs/_build/
