@@ -8,65 +8,143 @@
 
 외부에서 접속용(변경 내용 없음)
 
-| 이름                | 기본 포트 | 설정한 포트 | URL                                             |
-|:------------------|:-----:|:------:|:------------------------------------------------|
-| rabbitmq          | 15672 |  4101  | http://inno3t2:4101   <BR>(id:guest/pswd:guest) |
-| rabbitmq          | 5672  |  4102  ||
-| rabbitmq          | 15671 |  4103  ||
-| rabbitmq          | 5671  |  4104  ||
-| rabbitmq          | 4369  |  4105  ||
-| config-service    | 8888  |  4111  | http://inno3t2:4111/ecommerce/default           |
-| apigateway-service| 8000  |  4112  | http://inno3t2:4100/           |
-| discovery-service | 8761  |  4116  | http://inno3t2:4116/                            |             |
-| MariaDB           | 3306  |  4121  | jdbc:mariadb://inno3t2:4121/my-db               |
-| Zipkin            | 9411  |  4126  | http://inno3t2:4126/zipkin/                     |
-| prometheus        | 9090  |  4131  | http://inno3t2:4131/                            |
-| Grafana           | 3000  |  4133  | http://inno3t2:4133/ <BR?admin/admin            |
-| user-service      | 8051  |  4151  | user-service debug(별도 확인 필요)                    |
-
+| 이름                 | 기본 포트 | 설정한 포트 | URL                                             |
+|:-------------------|:-----:|:------:|:------------------------------------------------|
+| rabbitmq           | 15672 |  4101  | http://inno3t2:4101   <BR>(id:guest/pswd:guest) |
+| rabbitmq           | 5672  |  4102  ||
+| rabbitmq           | 15671 |  4103  ||
+| rabbitmq           | 5671  |  4104  ||
+| rabbitmq           | 4369  |  4105  ||
+| config-service     | 8888  |  4111  | http://inno3t2:4111/ecommerce/default           |
+| apigateway-service | 8000  |  4112  | http://inno3t2:4112/???                         |
+| discovery-service  | 8761  |  4116  | http://inno3t2:4116/                            | 
+| MariaDB            | 3306  |  4121  | jdbc:mariadb://inno3t2:4121/my-db               |
+| Zipkin             | 9411  |  4126  | http://inno3t2:4126/zipkin/                     |
+| prometheus         | 9090  |  4131  | http://inno3t2:4131/                            |
+| Grafana            | 3000  |  4133  | http://inno3t2:4133/ <BR>admin/admin            |
+| user-service       | 0(가변) |0(가변)| user-service debug(별도 확인 필요)      |
+| order-service      | 0(가변) |0(가변)|       |
+| catalog-service    | 0(가변) |0(가변)|       |
 
 ## 2. Centos에서 환경설정한 내용
 ### 2.1 RabbitMQ 
-- 도커 기동
+1. docker-compose-rabbitmq.yml
+      ```yaml
+      version: '2'
+      services:
+        rabbitmq:
+          container_name: rabbitmq
+          image: rabbitmq:management
+          ports:
+            - "4101:15672"
+            - "4102:5672"
+            - "4103:15671"
+            - "4104:5671"
+            - "4105:4369"
+          environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+          networks: 
+            my-network:
+      ```
+2. 기동
+
    ```shell
-   docker run -d --name rabbitmq --network ecommerce-network \
-         -p 4101:15672 -p 4102:5672 -p 4103:15671 -p 4104:5671 -p 4105:4369 \
-         -e RABBITMQ_DEFAULT_USER=guest \
-         -e RABBITMQ_DEFAULT_PASS=guest \
-         rabbitmq:3.11-management
+   $ docker-compose -f docker-compose-rabbitmq.yml up -d
    ```
 
-- 접속 확인
-   ```shell
-   http://127.0.0.1:15672/
+3. 접속 확인
+   ```shell                 
+   #해당서버
+   http://127.0.0.1:15672/  
+   #노트북(or 외부)
    http://inno3t2:4101/
    guest/guest
    ```
 ### 2.2 Config Server
 
-1. Maven 설치
+1. Maven 설치(한번만)
    ```shell
-   $> sudo yum update
-   $> sudo yum install -y maven
+   $ sudo yum update
+   $ sudo yum install -y maven
    ```
 
-2. 빌드
+2. 설정 내용
+   - application.yml 
+      ```yaml
+      spring:
+        profiles:
+          group:
+            "docker": "docker_profile, default_profile"
+            "local": "local_profile, default_profile"
+      ---
+      spring.config.activate.on-profile: default_profile
+      server:
+        port: 8888
+      
+      spring:
+        application:
+          name: config-service
+        rabbitmq:
+          host: 127.0.0.1
+        cloud:
+          config:
+            server:
+              git:
+                uri: https://github.com/myinno/spring-cloud-config
+      ---
+      #Local Exec
+      spring.config.activate.on-profile: local_profile
+      
+      spring:
+        rabbitmq:
+          host: 127.0.0.1
+      ---
+      #Docker
+      spring.config.activate.on-profile: docker_profile
+      
+      spring:
+        rabbitmq:
+          host: rabbitmq
+      ```
+   - bootstrap.yml
+      ```yaml
+      spring:
+         profiles:
+            group:
+               "docker": "docker_profile, default_profile"
+               "local": "local_profile, default_profile"
+      ---
+      spring.config.activate.on-profile: default_profile
+      ---
+      spring.config.activate.on-profile: local_profile
+      
+      encrypt:
+         #  key: abcdefghijklmnopqrstuvwxyz0123456789
+         key-store:
+            location: file:///d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\keystore\apiEncryptionKey.jks
+      ---
+      spring.config.activate.on-profile: docker_profile
+      
+      encrypt:
+         #  key: abcdefghijklmnopqrstuvwxyz0123456789
+         key-store:
+            location: file:///apiEncryptionKey.jks
+      ```  
+
+3. 빌드
 
    ```shell
    $ cd /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/config-service
    $ mvn clean package -DskipTests
-   $ docker build -t jcscom13/config-service:1.0 .
+   $ docker build -t msa2023/config-service:1.0 .
+   $ docker push msa2023/config-service:1.0 
    ```
-
-3. run
+4. run
    ```shell
-   $ docker run --rm -d -p 4111:8888 --network ecommerce-network \
-     -e "spring.rabbitmq.host=rabbitmq" \
-     -e "spring.profiles.active=default" \
-     --name config-service jcscom13/config-service:1.0
+   $ docker-compose -f docker-compose-config.yml up
    ```
-
-4. 확인
+5. 확인
    - docker network inspect ecommerce-network
    - http://inno3t2:4111/ecommerce/default
    - http://inno3t2:4111/application/default
@@ -80,28 +158,62 @@
    COPY target/discoveryservice-1.0.jar DiscoveryService.jar
    ENTRYPOINT ["java", "-jar", "DiscoveryService.jar"]
    ```
-2. docker Build
+2. Application.yaml
+      ```yaml
+      spring:
+        profiles:
+          group:
+            "docker": "docker_profile, default_profie"
+            "local": "local_profile, default_profie"
+      ---
+      spring.config.activate.on-profile: default_profie
+      server:
+        port: 8761
+      
+      spring:
+        application:
+          name: discoveryservice
+      ---
+      #Local Exec
+      spring.config.activate.on-profile: local_profie
+      
+      spring:
+        cloud:
+          config:
+            uri: http://127.0.0.1:8888
+            name: ecommerce
+      ---
+      #Docker
+      spring.config.activate.on-profile: docker_profie
+      spring:
+        cloud:
+          config:
+            uri: http://config-service:8888
+            name: ecommerce
+      ```
+
+3. docker Build
 
    ```shell
    $ cd /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/discoveryservice
    $ mvn clean package -DdkipTests
-   $ docker build -t jcscom13/discovery-service:1.0 .
+   $ docker build -t msa2023/discovery-service:1.0 . 
+   $ docker push msa2023/discovery-service:1.0
    ```
 
 3. run
 
    ```shell
-   $ docker run -d -p 4116:8761 --network ecommerce-network \
-     -e "spring.cloud.config.uri=http://config-service:8888" \
-     --name discovery-service jcscom13/discovery-service:1.0
+   $ docker-compose -f docker-compose-discovery.yml up -d
    ```
+
 ### 2.4 API Gateway
 
 1. DockerFile
 
    #8051 port는 Remote Debug용으로 추가함 (추가시 space로 구분함)
    EXPOSE 8051
-   - 일반영 DockerFile
+   - 일반용 DockerFile
       ```shell
       FROM openjdk:17-ea-11-jdk-slim
       VOLUME /tmp
@@ -117,37 +229,87 @@
       ENTRYPOINT ["java","-agentlib:jdwp=transport=dt_socket,address=*:8051,server=y,suspend=n","-jar","ApigatewayService.jar"]
       EXPOSE 8051
       ```
-2. Application.yaml에 Config서버 추가 (당장 사용하는 부분은 없음)
-   - 추가 하지 말자 (boot.yaml에 이미 있음-- 혼동) 
+2. application.yaml 
    ```yaml
-   cloud:
-   ##  config:
-   #    uri: http://127.0.0.1:8888
-   #    name: ecommerce
+   spring:
+      profiles:
+         group:
+            "docker": "docker_profile, default_profie"
+            "local": "local_profile, default_profie"
+   ---
+   spring.config.activate.on-profile: default_profie
+   
+   server:
+      port: 8000
+   spring:
+      application:
+         name: apigateway-service
+      cloud:
+         gateway:
+            default-filters:
+               - name: GlobalFilter
+                 args:
+                    baseMessage: Spring Cloud BaseMessage GlobalFilter
+                    preLogger: true
+                    postLogger: true
+            routes:
+               - id: user-service
+                 uri: lb://USER-SERVICE
+                 predicates:
+                    - Path=/user-service/login
+                    - Method=POST
+                 filters:
+                    - RemoveRequestHeader=Cookie
+                    - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+               ....
+   ---
+   #Local Exec
+   spring.config.activate.on-profile: local_profile
+   spring:
+      rabbitmq:
+         host: 127.0.0.1
+   eureka:
+      client:
+         service-url:
+            defaultZone: http://localhost:8761/eureka
+   ---
+   #Docker
+   spring.config.activate.on-profile: docker_profile
+   
+   spring:
+      rabbitmq:
+         host: rabbitmq
+   eureka:
+      client:
+         service-url:
+            defaultZone: http://discovery-service:8761/eureka/
    ```
-
 3. docker build
 
    ```shell
    $ mvn clean package -DskipTests
    #일반용
-   $ docker build -t jcscom13/apigateway-service:1.0 .   
+   $ docker build -t msa2023/apigateway-service:1.0 .     
+   $ docker push msa2023/apigateway-service:1.0
+   
 
    # Debug용
-   $ docker build -t jcscom13/apigateway-service:1.0  -f DockerfileDebug .   
+   $ docker build -t msa2023/apigateway-service:1.0  -f DockerfileDebug .   
+   $ docker push msa2023/apigateway-service:1.0
    ```
-
-4. docker run
-   - ![](images/A16-ApiGateWayConfig.png)
-   - 4152 debug 용
-   ```shell
-   $ docker run -d -p 4112:8000 --network ecommerce-network \
-     -p 4152:8051 \
-     -e "spring.cloud.config.uri=http://config-service:8888" \
-     -e "spring.rabbitmq.host=rabbitmq" \
-     -e "eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka/" \
-     --name apigateway-service jcscom13/apigateway-service:1.0
-   ```
+5. docker-compose
+   - Run: docker-compose -f docker-compose-apigateway.yml up   
+      ```yaml
+      version: '2'
+      services:
+        apigateway-service:
+          container_name: apigateway-service
+          image: msa2023/apigateway-service:1.0
+          ports:
+            - "4112:8000"
+          environment:
+            - spring.profiles.active=docker
+      ```
 ### 2.5 MariaDB
 
 1. DockerFile
@@ -179,17 +341,35 @@
 2. 이미지 빌드
 
    ```shell
-   $ docker build -t jcscom13/my-mariadb:1.0 -f Dockerfile-MariaDB .
+   $ docker build -t msa2023/my-mariadb:1.0 -f Dockerfile-MariaDB .  
+   $ docker push  msa2023/my-mariadb:1.0
    ```
+3. DockerCompose
 
-3. docker run
+      ```yaml
+      version: '2'
+      
+      #DB내용을 유지하기 위하여
+      volumes:
+        mariadb-volume: {}
+      
+      services:
+        mariadb:
+          image: msa2023/my-mariadb:1.0
+          ports:
+            - "4121:3306"
+          volumes:
+            - mysql-volume:/var/lib/mysql
+          networks:
+            my-network:
+      ```
+4. docker run
 
    ```shell
-   $ docker run -d -p 4121:3306 --network ecommerce-network \
-     --name my-mariadb jcscom13/my-mariadb:1.0
+   $ docker-compose -f docker-compose-mariadb.yaml up -d
    ```
 
-4. 빌드 이후 초기 Database 생성
+5. 빌드 이후 초기 Database 생성
 
    ```shell
    $ docker exec -it my-mariadb bash
@@ -223,7 +403,6 @@ docker-compose를 이용한 설정
 - 참고: https://github.com/wurstmeister/kafka-docker
 - $ docker-compose -f docker-compose-single-broker.yml up -d
 
-
 1. docker-compose-kafka.yml
     - /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/kafka
     - 'networks' 잘 확인하자
@@ -232,6 +411,7 @@ docker-compose를 이용한 설정
        version: '2'
        services:
          zookeeper:
+           container_name: zookeeper
            image: wurstmeister/zookeeper
            ports:
              - "2181:2181"
@@ -239,7 +419,7 @@ docker-compose를 이용한 설정
              my-network:
                ipv4_address: 172.19.0.100
          kafka:
-           # build: .
+           container_name: kafka
            image: wurstmeister/kafka
            ports:
              - "9092:9092"
@@ -321,25 +501,66 @@ docker-compose를 이용한 설정
    #8051 port는 Remote Debug용으로 추가함 (추가시 space로 구분함)
    EXPOSE 8051 
    ```
+   - application.yaml (주요 URL만 표시)
+
+      ```yaml
+      spring:
+        profiles:
+          group:
+            "local": "local_profile, default_profile"
+            "docker": "docker_profile, default_profile"
+      ---
+      spring.config.activate.on-profile: "default_profile"
+      server:
+        port: 0
+      spring:
+        application:
+          name: user-service
+        sleuth:
+          sampler:
+            probability: 1.0
+      ..
+      ---
+      spring.config.activate.on-profile: "local_profile"
+      
+      spring:
+        zipkin:
+          base-url: http://127.0.0.1:9411
+        rabbitmq:
+          host: 127.0.0.1
+      eureka:
+        client:
+          service-url:
+            defaultZone: http://localhost:8761/eureka
+      
+      ---
+      # Docker
+      spring.config.activate.on-profile: docker_profile
+      
+      spring:
+        zipkin:
+          base-url: http://zipkin:9411
+        rabbitmq:
+          host: rabbitmq
+      
+      eureka:
+        client:
+          service-url:
+            defaultZone: http://discovery-service:8761/eureka/
+      ```
 
 2. build
    ```shell
    $ cd user-service/
    $ mvn clean package -DskipTests
-   $ docker build -t=jcscom13/user-service:1.0 -f Dockerfile .
+   $ docker build -t=msa2023/user-service:1.0 -f Dockerfile .
+   $ docker push msa2023/user-service:1.0
    ```        
-3 run
+3. run
    - 8051 Debug용도로 Port forward했음
    ```shell
-   $ docker run --rm  -d --network ecommerce-network \
-     --name user-service \
-     -p 4151:8051 \
-     -e "spring.cloud.config.uri=http://config-service:8888" \
-     -e "spring.rabbitmq.host=rabbitmq" \
-     -e "spring.zipkin.base-url=http://zipkin:9411" \
-     -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
-     -e "logging.file=/api-logs/users-ws.log" \
-     jcscom13/user-service:1.0
+   $ docker-compose -f docker-compose-app-user-service.yml up -d
+
    ``` 
 
 #### order-service
@@ -357,65 +578,59 @@ docker-compose를 이용한 설정
    ```shell
    $ cd order-service/
    $ mvn clean package -DskipTests
-   $ docker build -t=jcscom13/order-service:1.0 -f Dockerfile .
+   $ docker build -t msa2023/order-service:1.0 -f Dockerfile .
+   $ docker push msa2023/order-service:1.0
    ```        
 3. run
-    - 기동후 로그 및 ereka 확인해 보자
-   ```shell
-   $ docker run --rm --network ecommerce-network \
-     --name order-service \
-     -e "spring.zipkin.base-url=http://zipkin:9411" \
-     -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
-     -e "spring.datasource.url=jdbc:mariadb://my-mariadb:3306/my_db" \
-     -e "user.KafkaProducerConfig.BOOTSTRAP_SERVERS_CONFIG=172.19.0.101:9092" \
-     -e "logging.file=/api-logs/orders-ws.log" \
-     jcscom13/order-service:1.0
+    - 기동후 로그 및 eureka 확인해 보자
+   ```shell            
+   $ docker-compose -f docker-compose-app-user-service.yml up -d
    ```
-4. mariadb에서 특정 IP가 접속 오류가 발생하는 경우
 
-   ```shell
-   $> docker exec -it mariadb bash
-   Mysql> mysql -h127.0.0.1 -uroot -p
-   $> use mydb;
-   $> grant all privileges on *.* to 'root'@'%' identified by 'test1357'
-   $> flush privileges
-   ```
 
 #### Catalog-service
 
-1. kafka 서버 정보 관련 변경
-   - order 서비스와 동일한 방식으로 수정  (강의에서는 hardcoding으로 ip변경했음)
-   ```java
-   @EnableKafka
-   @Configuration
-   public class KafkaProducerConfig {
-   
-       Environment env;
-   
-       public KafkaProducerConfig (Environment env) {
-           this.env    =   env;
-       }
-   
-       @Bean
-       public ProducerFactory<String, String> producerFactory() {
-           String  BOOTSTRAP_SERVERS = String.format(env.getProperty("user.KafkaProducerConfig.BOOTSTRAP_SERVERS_CONFIG"), "127.0.0.1:9092");
-           Map<String, Object> properties = new HashMap<>();
-   //        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "10.200.0.1:9092");
-           properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);  //localhost
-   
-       }
-   
-      ...
-   }
-   ```
-    - application.yaml
+1. application.yml 설정 내용
+
    ```yaml
+   spring:
+     profiles:
+       group:
+         "docker": "docker_profile, default_profile"
+         "local": "local_profile, default_profile"
+   ---
+   # 공통 적용 대상
+   spring.config.activate.on-profile: default_profile
+   
+   spring: ...
+   ---
+   #Local Exec
+   spring.config.activate.on-profile: local_profile
+   
+   eureka:
+     client:
+       service-url:
+         defaultZone: http://127.0.0.1:8761/eureka
+   
    #kafka 서버 정보
    user:
      KafkaProducerConfig:
        BOOTSTRAP_SERVERS_CONFIG: 10.200.0.1:9092
-   #    BOOTSTRAP_SERVERS_CONFIG: 172.19.0.101:9092
+   ---
+   #Docker
+   spring.config.activate.on-profile: docker_profile
+   
+   eureka:
+     client:
+       service-url:
+         defaultZone: http://discovery-service:8761/eureka/
+   
+   #kafka 서버 정보
+   user:
+     KafkaProducerConfig:
+       BOOTSTRAP_SERVERS_CONFIG: 172.19.0.101:9092
    ```
+
 2. Dockerfile
 
    ```shell
@@ -429,30 +644,25 @@ docker-compose를 이용한 설정
    ```shell
    $ cd catalog-service/
    $ mvn clean package -DskipTests
-   $ docker build -t=jcscom13/catalog-service:1.0 -f Dockerfile .
+   $ docker build -t=msa2023/catalog-service:1.0 -f Dockerfile .
+   $ docker-compose -f docker-compose-app-catalog-service.yml up -d
    ```        
-4. run
-
-   ```shell
-   $ docker run --rm -d --network ecommerce-network \
-     --name catalog-service \
-     -e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
-     -e "user.KafkaProducerConfig.BOOTSTRAP_SERVERS_CONFIG=172.19.0.101:9092" \
-     -e "logging.file=/api-logs/catalogs-ws.log" \
-     jcscom13/catalog-service:1.0
-   ``` 
-
 
 ### 테스트
 Postman으로 테스트 ()
 
-- user 등록
-- 로그인
-- Health (token)
-- Welcome
-- 주문 등록
+| 제목 | URL |
+| :---- | :---- |
+|actuator|http://inno3t2:4112/user-service/actuator|
+|config-ecommerce|http://inno3t2:4111/ecommerce/default|
+|User welcome|http://inno3t2:4112/user-service/welcome|
+|User Health-Check|http://inno3t2:4112/user-service/welcome|
+|User-create|http://inno3t2:4112/user-service/users|
+|LOGIN |http://inno3t2:4112/user-service/login|
+|User정보조회(특정고객)|http://inno3t2:4112/user-service/users/020553a7-f5d6-404d-865c-debb51e3e75f|
+|Order-주문|http://inno3t2:4112/order-service/020553a7-f5d6-404d-865c-debb51e3e75f/orders|
 
+- ![](images/A02-PostmanTest.png)
 
-
-
-##3. Docker-Compopse로 변경
+## 3. Docker-Compopse 통합
+인프라/app 으로 분류하여 통합

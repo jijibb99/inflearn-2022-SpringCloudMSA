@@ -1,7 +1,32 @@
 spring:
+  profiles:
+    group:
+      "docker": "docker_profile, default_profile"
+      "local": "local_profile, default_profile"
+---
+#Local Exec
+spring.config.activate.on-profile: default_profile
+
+---
+#Local Exec
+spring.config.activate.on-profile: local_profile
+
+spring:
   cloud:
     config:
-      uri: http://127.0.0.1:8012
-      name: user-service
-  profiles:
-    active: dev
+      uri: http://127.0.0.1:8888
+      name: ecommerce
+#  profiles:
+#    active: dev
+
+---
+#docker
+spring.config.activate.on-profile: docker_profile
+
+spring:
+  cloud:
+    config:
+      uri: http://config-service:8888
+      name: ecommerce
+#  profiles:
+#    active: dev

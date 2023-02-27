@@ -1,5 +1,10 @@
+spring:
+  profiles:
+    group:
+      "docker": "docker_profile, default_profile"
+      "local": "local_profile, default_profile"
 ---
-spring.profiles: default
+spring.config.activate.on-profile: default_profile
 server:
   port: 8888
 
@@ -11,8 +16,8 @@ spring:
     port: 5672
     username: guest
     password: guest
-  profiles:
-    active: default
+#  profiles:
+#    active: default
 #    active: native
   cloud:
     config:
@@ -33,8 +38,8 @@ management:
 
 ---
 #Local Exec
-spring.profiles: local
-spring.profiles.active: native
+spring.config.activate.on-profile: local_profile
+
 spring:
   rabbitmq:
     host: 127.0.0.1
@@ -45,8 +50,8 @@ spring:
 
 ---
 #Docker
-spring.profiles: docker
-spring.profiles.active: default
+spring.config.activate.on-profile: docker_profile
+
 spring:
   rabbitmq:
     host: rabbitmq

@@ -1,7 +1,26 @@
+spring:
+  profiles:
+    group:
+      "docker": "docker_profile, default_profile"
+      "local": "local_profile, default_profile"
+---
+spring.config.activate.on-profile: default_profile
+
+---
+spring.config.activate.on-profile: local_profile
+
 encrypt:
-#  key: abcdefghijklmnopqrstuvwxyz0123456789
+  #  key: abcdefghijklmnopqrstuvwxyz0123456789
   key-store:
-#cd ci    location: file:///d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\keystore\apiEncryptionKey.jks
+    location: file:///d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\keystore\apiEncryptionKey.jks
+    password: 1q2w3e4r
+    alias: apiEncryptionKeycd ../com
+---
+spring.config.activate.on-profile: docker_profile
+
+encrypt:
+  #  key: abcdefghijklmnopqrstuvwxyz0123456789
+  key-store:
     location: file:///apiEncryptionKey.jks
     password: 1q2w3e4r
-    alias: apiEncryptionKey
+    alias: apiEncryptionKeycd ../com

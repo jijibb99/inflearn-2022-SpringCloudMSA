@@ -1,5 +1,10 @@
+spring:
+  profiles:
+    group:
+      "docker": "docker_profile, default_profile"
+      "local": "local_profile, default_profile"
 ---
-spring.profiles: default
+spring.config.activate.on-profile: default_profile
 server:
   port: 8761
 
@@ -14,7 +19,7 @@ eureka:
 
 ---
 #Local Exec
-spring.profiles: local
+spring.config.activate.on-profile: local_profile
 
 spring:
   cloud:
@@ -24,7 +29,8 @@ spring:
 
 ---
 #Docker
-spring.profiles: docker
+spring.config.activate.on-profile: docker_profile
+
 
 spring:
   cloud:

@@ -1,6 +1,7 @@
 version: '2'
 services:
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:management
     ports:
       - "4101:15672"
@@ -13,7 +14,6 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks: 
       my-network:
-
 
 networks: 
   my-network:

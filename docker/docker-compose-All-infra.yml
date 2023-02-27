@@ -1,0 +1,102 @@
+version: '2'
+
+#DB내용을 유지하기 위하여
+volumes:
+  mariadb-volume: {}
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management
+    ports:
+      - "4101:15672"
+      - "4102:5672"
+      - "4103:15671"
+      - "4104:5671"
+      - "4105:4369"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      my-network:
+
+
+  config-service:
+    container_name: config-service
+    image: msa2023/config-service:1.0
+    ports:
+      - "4111:8888"
+    environment:
+      - spring.profiles.active=docker
+    depends_on:
+      - rabbitmq
+    networks:
+      my-network:
+
+
+  discovery-service:
+    container_name: discovery-service
+    image: msa2023/discovery-service:1.0
+    ports:
+      - "4116:8761"
+    environment:
+      - spring.profiles.active=docker
+    depends_on:
+      - config-service
+    networks:
+      my-network:
+
+  apigateway-service:
+    container_name: apigateway-service
+    image: msa2023/apigateway-service:1.0
+    ports:
+      - "4112:8000"
+    environment:
+      - spring.profiles.active=docker
+    depends_on:
+      - config-service
+    networks:
+      my-network:
+
+
+  mariadb:
+    container_name:   mariadb
+    image: msa2023/my-mariadb:1.0
+    ports:
+      - "4121:3306"
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+    networks:
+      my-network:
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "4126:9411"
+    networks:
+      my-network:
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - "4131:9090"
+    volumes:
+      - "/home/msa2023/inflearn-2022-SpringCloudMSA/workspace/docker-prometheus/prometheus-docker.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      my-network:
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - "4133:3000"
+    networks:
+      my-network:
+
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network

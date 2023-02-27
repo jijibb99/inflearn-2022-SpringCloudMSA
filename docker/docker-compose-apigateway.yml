@@ -1,0 +1,19 @@
+version: '2'
+services:
+  apigateway-service:
+    container_name: apigateway-service
+    image: msa2023/apigateway-service:1.0
+    ports:
+      - "4112:8000"
+    environment:
+      - spring.profiles.active=docker
+#    depends_on:
+#      - config-service
+    networks:
+      my-network:
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network
+

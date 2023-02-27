@@ -1,3 +1,12 @@
+spring:
+  profiles:
+    group:
+      "docker": "docker_profile, default_profile"
+      "local": "local_profile, default_profile"
+---
+# 공통 적용 대상
+spring.config.activate.on-profile: default_profile
+
 server:
   port: 8082     # 임시(최종 시점에 0으로 변경
 
@@ -21,6 +30,16 @@ spring:
 #    username: sa
 #    password: 1234
 
+#여기서 처음 언급됨
+logging:
+  level:
+    com.example.catalogservice: DEBUG
+
+
+---
+#Local Exec
+spring.config.activate.on-profile: local_profile
+
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
@@ -31,12 +50,27 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
-#여기서 처음 언급됨
-logging:
-  level:
-    com.example.catalogservice: DEBUG
-
 #kafka 서버 정보
 user:
   KafkaProducerConfig:
     BOOTSTRAP_SERVERS_CONFIG: 10.200.0.1:9092
+
+
+---
+#Docker
+spring.config.activate.on-profile: docker_profile
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+
+#kafka 서버 정보
+user:
+  KafkaProducerConfig:
+    BOOTSTRAP_SERVERS_CONFIG: 172.19.0.101:9092

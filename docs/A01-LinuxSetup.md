@@ -107,8 +107,9 @@
 
    ```shell
    $ cd /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/discoveryservice
-   $ mvn clean package -DdkipTests
-   $ docker build -t jcscom13/discovery-service:1.0 .
+   $ mvn clean package -DskipTests
+   $ docker build -t jcscom13/discovery-service:1.0 .  
+   $ docker push  jcscom13/discovery-service:1.0
    ```
 
 3. run

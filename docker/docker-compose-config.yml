@@ -1,11 +1,12 @@
 version: '2'
 services:
   config-service:
-    image: jcscom13/config-service:1.0
+    container_name: config-service
+    image: msa2023/config-service:1.0
     ports:
       - "4111:8888"
     environment:
-      - SPRING_PROFILES_ACTIVE=docker default
+      - spring.profiles.active=docker
 #    depends_on:
 #      - rabbitmq
     networks:

@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+  user-service:
+    container_name: user-service
+    image: msa2023/user-service:1.0
+    environment:
+      - spring.profiles.active=docker
+    #      - logging.file=/api-logs/users-ws.log
+    depends_on:
+      - apigateway-service
+    networks:
+      my-network:
+
+  order-service:
+    container_name: order-service
+    image: msa2023/order-service:1.0
+    environment:
+      - spring.profiles.active=docker
+    #      - logging.file=/api-logs/users-ws.log
+    depends_on:
+      - apigateway-service
+    networks:
+      my-network:
+
+  catalog-service:
+    container_name: catalog-service
+    image: msa2023/catalog-service:1.0
+    environment:
+      - spring.profiles.active=docker
+    #      - logging.file=/api-logs/users-ws.log
+    depends_on:
+      - apigateway-service
+    networks:
+      my-network:
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network

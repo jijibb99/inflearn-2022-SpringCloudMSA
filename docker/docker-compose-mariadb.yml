@@ -1,0 +1,21 @@
+version: '2'
+
+#DB내용을 유지하기 위하여
+volumes:
+  mariadb-volume: {}
+
+services:
+  mariadb:
+    container_name:   mariadb
+    image: msa2023/my-mariadb:1.0
+    ports:
+      - "4121:3306"
+    volumes:
+      - mariadb-volume:/var/lib/mysql
+    networks:
+      my-network:
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network
