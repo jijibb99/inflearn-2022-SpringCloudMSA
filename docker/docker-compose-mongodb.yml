@@ -1,0 +1,26 @@
+version: '2'
+
+volumes:
+  mongo-volume: {}
+
+services:
+  mongo:
+    container_name: mongodb
+    image: mongo
+    mem_limit: 200m
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    volumes:
+      - mongo-volume:/data/db
+    ports:
+      - 4197:27017
+  mongo-express:
+    image: mongo-express
+    mem_limit: 200m
+    depends_on:
+      - mongo
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - useUnifiedTopology= true
+    ports:
+      - 4198:8081

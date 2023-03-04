@@ -6,7 +6,7 @@
 }
 </style>
 
-# 6 JWT
+# 6. JWT
 
 - Users Microservice – Login
 - JWT (Json Web Token)

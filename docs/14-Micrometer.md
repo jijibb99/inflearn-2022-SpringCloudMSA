@@ -6,7 +6,7 @@
 }
 </style>
 
-# 14: Microservice 모니터링 
+# 14. Microservice 모니터링 
 
 - Hystrix Dashboard + Turbine Server 
 - Micrometer 

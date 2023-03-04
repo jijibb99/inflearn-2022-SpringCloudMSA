@@ -6,7 +6,7 @@
 }
 </style>
 
-# 12: 데이터 동기화를 위한 Kafka 활용 ②
+# 12. 데이터동기화 Kafka1
 
 - Kafka 적용 – Orders + Catalogs Service
 - Kafka 적용 – Multiple Orders Service

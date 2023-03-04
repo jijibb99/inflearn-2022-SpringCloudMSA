@@ -1,0 +1,63 @@
+pipeline {
+	environment {
+	    imagename = "jcscom13/lecture-domain-docker"  //도커이미지 이름
+		dockerDir = "lecture-domain"    //DockerFile 위치
+	    registryCredential = 'docker-jcscom13'   //도커 허브 접속 계정 정보
+	    dockerImage = ''
+	}
+
+	agent any
+  
+	stages {
+		stage('compile') {
+			agent {
+				docker {
+			  		image 'maven:3.8.1-adoptopenjdk-11' 
+			  		args '-v /root/.m2:/root/.m2' 
+			  		reuseNode true
+				}
+			}
+			steps {	
+			   echo "----------------------------------------------------------------"
+			   echo "Maven 기반 컴파일 , 빌드, jar 파일 생성  "
+			   echo "----------------------------------------------------------------"
+		  		sh 'mvn -f lecture-domain/pom.xml  clean package -DskipTests=true'
+			}    
+		}     
+    
+		stage('Building image') {
+	      	steps{
+	        	script {
+					echo "----------------------------------------------------------------"
+					echo "docker.build  도커 이미지 생성 *******************"
+					echo "----------------------------------------------------------------"
+					dockerImage = docker.build(imagename, dockerDir)
+				}
+	    	}
+		}
+	    
+		stage('Deploy Image') {
+	      	steps{
+	        	script {
+					echo "----------------------------------------------------------------"
+					echo "docker.withRegistry  리파지토리 등록 *******************"
+					echo "----------------------------------------------------------------"
+	          		docker.withRegistry( '', registryCredential ) {
+	            		dockerImage.push("$BUILD_NUMBER")
+	             		dockerImage.push('latest')
+	          		}
+	        	}
+	      	}
+	    }
+	    stage('Remove Unused docker image') {
+	      	steps{
+				echo "----------------------------------------------------------------"
+	            echo "도커 이미지 정리 *********"
+				echo "----------------------------------------------------------------"
+				sh "docker rmi $imagename:$BUILD_NUMBER"
+	        	sh "docker rmi $imagename:latest"
+	
+	      	}
+	    }
+ 	}
+}

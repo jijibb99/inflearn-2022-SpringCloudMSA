@@ -6,7 +6,7 @@
 }
 </style>
 
-# 01. Service Discovery
+# 1. Service Discovery
 
 - Spring Cloud Netflix Eureka
 - Eureka Service Discovery – 프로젝트 생성

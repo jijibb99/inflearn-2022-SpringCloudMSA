@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+		<resetJUL>true</resetJUL> </contextListener> -->
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- GUID: OnlineContext에서 설정  -->
+			<!-- URL: AOPContext에서 설정  -->
+			<pattern>
+                %d{MM-dd HH:mm:ss.SSS},%-40.40logger,%36X{GUID},%2X{DEPTH},%-5level,%15t,%-100.600m,%ex{short} ->::%-80.80caller{1}
+
+            </pattern>
+	<!--
+			<pattern>%d{MM-dd HH:mm:ss.SSS},%-40.40logger,%36X{GUID},%2X{DEPTH},%-5level,%15t,[%30file:%-4line],%m, ->::%-30.30caller{1}</pattern>
+     -->
+        </encoder>
+    </appender>
+    <!-- Retry만 별도 분리하여 로깅  -->
+    <appender name="RETRY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/Retry.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/Retry.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 2 days' worth of history -->
+            <maxHistory>2</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{MM-dd HH:mm:ss.SSS},%-40.40logger,%36X{GUID},%2X{DEPTH},%-5level,%15t,%-100.600m,%ex{short} ->::%-40.40caller{1}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 거래처리 흐름, 재처리 내역은 별도 로깅    -->
+    <logger name="skmsa.apiutil.process.aop.RetryAspect" additivity="false">
+        <!--        <appender-ref ref="RETRY"/>-->
+        <appender-ref ref="console"/>
+        <level value="info"/>
+    </logger>
+
+    <logger name="skmsa.apiutil.interceptor.JournalAOP" additivity="false">
+        <appender-ref ref="RETRY"/>
+        <appender-ref ref="console"/>
+        <level value="info"/>
+    </logger>
+
+    <logger name="org.springframework" level="info" />
+    <logger name="org.hibernate.type" level="debug" />
+    <logger name="skmsa" level="trace" />
+
+    <root level="info">
+        <appender-ref ref="console" />
+    </root>
+
+    <!--
+    이 로그만 별도 파일로 저장하자
+    backend-lecture-1  | 08-28 23:36:13.600, TRACE, nio-8080-exec-3, e.l.c.i.MethodTraceInterceptor.writeToLog,223  , 메소드종료: everylecture.lecturemgt.service.impl.LectureServiceImpl.findOne : return:  Optional[Lecture(id=1, version=0, title=강의등록, minEnrollment=0, maxEnrollment=0, status=null, categoryId=1, categoryName=강의분류-Postman-2022-8-25 12:3:38, startLectureDt=2022-08-25, registerEndDt=2022-08-25, lectureStatus=0, memberId=1, opName=홍길동0825, endterDt=2022-08-25)], RunTime: 158
+    backend-lecture-1  | 08-28 23:36:13.603, TRACE, nio-8080-exec-3, e.l.c.i.MethodTraceInterceptor.writeToLog,223  , 메소드시작: everylecture.lecturemgt.controller.mapper.LectureGetDetailOutMapperImpl.toDto(Lecture(id=1, version=0, title=강의등록, minEnrollment=0, maxEnrollment=0, status=null, categoryId=1, categoryName=강의분류-Postman-2022-8-25 12:3:38, startLectureDt=2022-08-25, registerEndDt=2022-08-25, lectureStatus=0, memberId=1, opName=홍길동0825, endterDt=2022-08-25))
+    backend-lecture-1  | 08-28 23:36:13.626, TRACE, nio-8080-exec-3, e.l.c.i.MethodTraceInterceptor.writeToLog,223  , 메소드종료: everylecture.lecturemgt.controller.mapper.LectureGetDetailOutMapperImpl.toD
+     -->
+
+</configuration>

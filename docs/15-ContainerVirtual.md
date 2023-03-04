@@ -6,7 +6,7 @@
 }
 </style>
 
-#  15: 애플리케이션 배포를 위한 컨테이너 가상화
+# 15. 애플리케이션 배포를 위한 컨테이너 가상화
 
 - Container Virtualization  
 - Docker Desktop  

@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    group:
+      "local": "local_profile,default_profile"
+      "docker": "docker_profile,default_profile"
+---
+#spring.profiles: default
+spring.config.activate.on-profile: default_profile
+#swagger관련 오류떄문에 추가
+spring.mvc.pathmatch.matching-strategy: ant_path_matcher
+
+---
+#Local Exec
+spring.config.activate.on-profile: local_profile
+server.port: 8091
+
+# MONGODB (MongoProperties)
+spring.data.mongodb.uri: mongodb://inno3t2:4197/SKMSA
+
+---
+#Docker
+spring.config.activate.on-profile: docker_profile
+server.port: 8080
+# MONGODB (MongoProperties)
+spring.data.mongodb.uri: mongodb://mongodb:27017/SKMSA

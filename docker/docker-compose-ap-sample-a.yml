@@ -1,0 +1,17 @@
+version: '2'
+services:
+  catalog-service:
+    container_name: ap-sample-a
+    image: msa2023/ap-sample-a:1.0
+    environment:
+      - spring.profiles.active=local
+#      - logging.file=/api-logs/users-ws.log
+#    depends_on:
+#      - apigateway-service
+    networks:
+      my-network:
+
+networks:
+  my-network:
+    external: true
+    name: ecommerce-network

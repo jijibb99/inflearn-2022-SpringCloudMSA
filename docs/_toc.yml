@@ -25,4 +25,5 @@ parts:
     - file: 16-ContainerDeploy.md
   - file: A01-LinuxSetup.md
   - file: A02-LinuxDockerCompose.md
+  - file: B01-MultiConfig.md
 

@@ -7,7 +7,7 @@
 </style>
 
 
-# spring boot 2.4 application.yaml 구동방식 변경
+# B. Multi구성
 
 2021. 2. 24. 19:50
 - https://multifrontgarden.tistory.com/277

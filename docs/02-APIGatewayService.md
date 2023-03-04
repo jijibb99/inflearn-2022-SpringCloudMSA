@@ -6,7 +6,7 @@
 }
 </style>
 
-#  2: API Gateway Service
+#  2. API Gateway Service
 
 - API Gateway Service
 - Netflix Ribbon과 Zuul

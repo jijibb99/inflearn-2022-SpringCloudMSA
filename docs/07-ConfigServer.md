@@ -6,7 +6,7 @@
 }
 </style>
 
-# 7 ConfigServer
+# 7. ConfigServer
 
 1. Spring Cloud Config
 2. Local Git Repository
@@ -92,15 +92,15 @@ Spring Cloud Config
    2. 공통 Repository의 순서
       - application.yml
       - application-name.yml
-      - application-name-<profile>.yml
+      - application-name-profile.yml
 
 5. 테스트
    - config 서버 기동
-   - http://127.0.0.1:8888/ecommerce/default   (해당 디렉토리의 yaml 파일이 보여짐)
+   - http://127.0.0.1:8888/ecommerce/default (해당 디렉토리의 yaml 파일이 보여짐)
      - ecommerce: yaml 파일명
      - default: 프로파일을 명시하지 않은 경우
      - http://10.200.0.1:8012/ecommerce/dev  (ecommerce-dev.yaml)
-   - ![](images/7-1-Default.png)
+   - ![테스트](images/7-1-Default.png)
 
 ### Users Microservice
 1. Dependencies 추가 (config 서버를 사용하려면

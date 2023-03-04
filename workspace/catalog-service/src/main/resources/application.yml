@@ -8,7 +8,7 @@ spring:
 spring.config.activate.on-profile: default_profile
 
 server:
-  port: 8082     # 임시(최종 시점에 0으로 변경
+  port: 0     # 임시(최종 시점에 0으로 변경
 
 spring:
   application:

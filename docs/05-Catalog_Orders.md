@@ -6,7 +6,7 @@
 }
 </style>
 
-# 5 Catalogs, Orders Microservice
+# 5. Catalogs, Orders Microservice
 1. Catalogs Microservice 프로젝트 생성
 2. Orders Microservice 프로젝트 생성
 

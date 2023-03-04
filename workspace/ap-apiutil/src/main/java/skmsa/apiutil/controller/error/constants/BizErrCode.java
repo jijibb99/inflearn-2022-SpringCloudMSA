@@ -1,0 +1,34 @@
+package skmsa.apiutil.controller.error.constants;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+
+public enum  BizErrCode {
+    H200_OK_VIEW(200, "정상조회되었습니다."),
+
+    //400 BAD_REQUEST 잘못된 요청
+    H400_INVALID_PARAMETER(400, "파라미터 값을 확인해주세요."),
+
+    //404 NOT_FOUND 잘못된 리소스 접근
+    H404_DISPLAY_NOT_FOUND(404, "존재하지 않는 전시회 ID 입니다."),
+    H404_FAIR_NOT_FOUND(404, "존재하지 않는 박람회 ID 박람회입니다."),
+    H404_FESTIVAL_NOT_FOUND(404, "존재하지 않는 페스티벌 ID 페스티벌입니다."),
+    H404_SAVED_DISPLAY_NOT_FOUND(404, "저장하지 않은 전시회입니다."),
+    H404_SAVED_FAIR_NOT_FOUND(404, "저장하지 않은 박람회입니다."),
+    H404_SAVED_FESTIVAL_NOT_FOUND(404, "저장하지 않은 페스티벌입니다."),
+
+    //409 CONFLICT 중복된 리소스
+    H409_ALREADY_SAVED_DISPLAY(409, "이미 저장한 전시회입니다."),
+    H409_ALREADY_SAVED_FAIR(409, "이미 저장한 박람회입니다."),
+    H409_ALREADY_SAVED_FESTIVAL(409, "이미 저장한 페스티벌입니다."),
+
+    //500 INTERNAL SERVER ERROR
+    H500_INTERNAL_SERVER_ERROR(500, "서버 에러입니다. 서버 팀에 연락주세요!");
+
+    private final int status;
+    private final String message;
+    //https://velog.io/@kiiiyeon/스프링-ExceptionHandler를-통한-예외처리
+}

@@ -6,7 +6,7 @@
 }
 </style>
 
-# 9 Encryption과 Decryption
+# 9. Encryption과 Decryption
 
 - Encryption types
 - JCE

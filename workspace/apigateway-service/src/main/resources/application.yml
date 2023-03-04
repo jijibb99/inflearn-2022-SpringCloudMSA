@@ -21,6 +21,15 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+        - id: ap-samplea
+          uri: lb://SAMPLEA
+          predicates:
+            - Path=/samplea/**
+        - id: ap-sampleb
+          uri: lb://SAMPLEB
+          predicates:
+            - Path=/sampleb/**
+
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:

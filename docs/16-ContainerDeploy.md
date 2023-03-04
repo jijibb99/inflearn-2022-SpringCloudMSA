@@ -6,7 +6,7 @@
 }
 </style>
 
-# 16: 애플리케이션 배포 – Docker Container
+# 16. 애플리케이션 배포 – Docker Container
 
 - Design Deployment  
 - Configuration server  

@@ -6,7 +6,7 @@
 }
 </style>
 
-# 11 데이터동기화 Kafka1
+# 11. 데이터동기화 Kafka1
 
 1. Kafka란?
 2. Kafka 설치

@@ -1,0 +1,4 @@
+03-09 09:28:09.791,skmsa.apiutil.interceptor.JournalAOP    ,                                    ,  ,INFO ,  restartedMain,[SKMSA JournalAOP  생성자] >>::Caller+0	 at skmsa.apiutil.interceptor.JournalAOP.<init>(JournalAOP.java:31)
+  03-09 09:37:37.117,skmsa.apiutil.interceptor.JournalAOP    ,                                    ,  ,INFO ,  restartedMain,[SKMSA JournalAOP  생성자] >>::Caller+0	 at skmsa.apiutil.interceptor.JournalAOP.<init>(JournalAOP.java:31)
+  03-09 09:52:24.446,skmsa.apiutil.interceptor.JournalAOP    ,                                    ,  ,INFO ,  restartedMain,[SKMSA JournalAOP  생성자] >>::Caller+0	 at skmsa.apiutil.interceptor.JournalAOP.<init>(JournalAOP.java:31)
+  

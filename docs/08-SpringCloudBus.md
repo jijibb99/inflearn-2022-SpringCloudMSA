@@ -6,7 +6,7 @@
 }
 </style>
 
-# 8 Spring Cloud Bus
+# 8. Spring Cloud Bus
 
 1. Spring Cloud Bus
 2. RabbitMQ 설치

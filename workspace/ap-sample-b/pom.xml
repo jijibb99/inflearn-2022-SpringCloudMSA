@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 공통 설정을 상위에 기록	-->
+    <parent>
+        <groupId>skmsa</groupId>
+        <artifactId>skmsa</artifactId>
+        <version>1.0</version>
+        <relativePath>../skmsa-pom.xml</relativePath>
+    </parent>
+
+    <groupId>ap-sample-b</groupId>
+    <artifactId>sample.b</artifactId>
+    <version>1.0</version>
+    <name>ap-sample-B</name>
+    <description>MSA Sample(B)</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <!--		Hystrix 라이브러리-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-hystrix -->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>-->
+<!--            <version>2.2.10.RELEASE</version>-->
+<!--        </dependency>-->
+        <!--		Ribbon 추가-LoadBalanced-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>-->
+<!--            <version>2.2.10.RELEASE</version>-->
+<!--        </dependency>-->
+
+        <!--		Eureka Client 라이브러리를 적용-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+<!--            <version>${spring.cloud.version}</version>-->
+        </dependency>
+
+    </dependencies>
+
+
+</project>

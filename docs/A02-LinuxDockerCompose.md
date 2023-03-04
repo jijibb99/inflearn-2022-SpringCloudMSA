@@ -1,4 +1,4 @@
-# DockerCompose로 통합
+# A2. DockerCompose로 통합
 각 환경별 설정이 상이한 부분은 하나의 yaml파일에서 profile로 구분
 - default모든 환경에 적용되는 내용
 - local, docker, k8s, aws로 구분하여 설정예정
@@ -15,6 +15,7 @@
 | rabbitmq           | 15671 |  4103  ||
 | rabbitmq           | 5671  |  4104  ||
 | rabbitmq           | 4369  |  4105  ||
+| kafka              | 9092  |  9092  | 4192로 변경시 오류 발생                                 |
 | config-service     | 8888  |  4111  | http://inno3t2:4111/ecommerce/default           |
 | apigateway-service | 8000  |  4112  | http://inno3t2:4112/???                         |
 | discovery-service  | 8761  |  4116  | http://inno3t2:4116/                            | 
@@ -22,9 +23,9 @@
 | Zipkin             | 9411  |  4126  | http://inno3t2:4126/zipkin/                     |
 | prometheus         | 9090  |  4131  | http://inno3t2:4131/                            |
 | Grafana            | 3000  |  4133  | http://inno3t2:4133/ <BR>admin/admin            |
-| user-service       | 0(가변) |0(가변)| user-service debug(별도 확인 필요)      |
-| order-service      | 0(가변) |0(가변)|       |
-| catalog-service    | 0(가변) |0(가변)|       |
+| user-service       | 0(가변) | 0(가변)  | user-service debug(별도 확인 필요)                    |
+| order-service      | 0(가변) | 0(가변)  |                                                 |
+| catalog-service    | 0(가변) | 0(가변)  |                                                 |
 
 ## 2. Centos에서 환경설정한 내용
 ### 2.1 RabbitMQ 
@@ -146,8 +147,15 @@
    ```
 5. 확인
    - docker network inspect ecommerce-network
-   - http://inno3t2:4111/ecommerce/default
+   - http://inno3t2:4111/ecommerce/default 
    - http://inno3t2:4111/application/default
+
+   | 테스트 URL                                      | 결과 |
+   |:---------------------------------------------|:---------------------------------------|
+   | http://10.250.141.146:4111/ecommerce/dev     | ecommerce-dev.yml,<BR>ecommerce.yml<BR>application.yml|
+   | http://10.250.141.146:4111/ecommerce/default | ecommerce.yml<BR>application.yml                      |
+   | application/default                          | application.yml                                       |
+
 
 ### 2.3 Eureka Discovery
 
@@ -196,11 +204,10 @@
 
    ```shell
    $ cd /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/discoveryservice
-   $ mvn clean package -DdkipTests
+   $ mvn clean package -DskipTests
    $ docker build -t msa2023/discovery-service:1.0 . 
    $ docker push msa2023/discovery-service:1.0
    ```
-
 3. run
 
    ```shell
@@ -644,7 +651,8 @@ docker-compose를 이용한 설정
    ```shell
    $ cd catalog-service/
    $ mvn clean package -DskipTests
-   $ docker build -t=msa2023/catalog-service:1.0 -f Dockerfile .
+   $ docker build -t=msa2023/catalog-service:1.0 -f Dockerfile . 
+   $ docker push msa2023/catalog-service:1.0
    $ docker-compose -f docker-compose-app-catalog-service.yml up -d
    ```        
 

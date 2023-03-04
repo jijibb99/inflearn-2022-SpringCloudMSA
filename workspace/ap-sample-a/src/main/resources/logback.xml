@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL> </contextListener> -->
+	<!-- 화면 출력 용-->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>
+				<!--                %d{MM-dd HH:mm:ss.SSS},%-40.40logger,%36X{GUID},%2X{DEPTH},%-5level,%15t,%m%ex{2} >>::%-80.80caller{1}-->
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-B3-ParentSpanId},%X{X-Span-Export}] [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+
+
+			<!--
+            [%file:%line] : 파일명, 라인
+            ==>Trace: %-32.32caller{1} : 로깅 라인 바로가기 링크
+            <pattern>%d %5p %40.40c:%4L - %m%n</pattern>
+              pattern.console: "%clr(%d{MM-dd HH:mm:ss.SSS}){blue}, %-5level, %clr(%-8.15t){cyan}, %clr(%c{5}. %M){blue}%clr(,%-4L){blue} %clr(,){red} %clr(%m){faint}%n"
+            -->
+		</encoder>
+	</appender>
+
+	<!-- Retry만 별도 분리하여 로깅  -->
+	<appender name="RETRY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/Retry.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>logs/Retry.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- keep 2 days' worth of history -->
+			<maxHistory>2</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{MM-dd HH:mm:ss.SSS},%-40.40logger,%36X{GUID},%2X{DEPTH},%-5level,%15t,%m >>::%-80.80caller{1}
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="org.apache.kafka" level="info"/>
+	<logger name="org.springframework" level="info"/>
+	<logger name="org.hibernate.type.descriptor.sql" level="trace"/>  <!--#파라미터 바인딩 출력  -->
+	<logger name="org.springframework.aop.interceptor" level="info"/> <!-- 메소드 호출이력 -->
+	<logger name="org.hibernate.type" level="debug"/>
+	<logger name="sample" level="debug"/>
+	<logger name="skmsa" level="debug"/>
+
+	<!-- 거래처리 흐름, 재처리 내역은 별도 로깅    -->
+	<logger name="skmsa.apiutil.process.aop.RetryAspect" additivity="false">
+		<!--        <appender-ref ref="RETRY"/>-->
+		<appender-ref ref="console"/>
+		<level value="info"/>
+	</logger>
+
+	<logger name="skmsa.apiutil.interceptor.JournalAOP" additivity="false">
+		<appender-ref ref="RETRY"/>
+		<appender-ref ref="console"/>
+		<level value="info"/>
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="console"/>
+	</root>
+
+</configuration>
