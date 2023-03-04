@@ -196,11 +196,10 @@
 
    ```shell
    $ cd /home/msa2023/inflearn-2022-SpringCloudMSA/workspace/discoveryservice
-   $ mvn clean package -DdkipTests
+   $ mvn clean package -DskipTests
    $ docker build -t msa2023/discovery-service:1.0 . 
    $ docker push msa2023/discovery-service:1.0
    ```
-
 3. run
 
    ```shell
@@ -644,7 +643,8 @@ docker-compose를 이용한 설정
    ```shell
    $ cd catalog-service/
    $ mvn clean package -DskipTests
-   $ docker build -t=msa2023/catalog-service:1.0 -f Dockerfile .
+   $ docker build -t=msa2023/catalog-service:1.0 -f Dockerfile . 
+   $ docker push msa2023/catalog-service:1.0
    $ docker-compose -f docker-compose-app-catalog-service.yml up -d
    ```        
 

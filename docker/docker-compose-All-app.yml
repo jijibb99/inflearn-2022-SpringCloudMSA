@@ -7,8 +7,8 @@ services:
     environment:
       - spring.profiles.active=docker
     #      - logging.file=/api-logs/users-ws.log
-    depends_on:
-      - apigateway-service
+#    depends_on:
+#      - apigateway-service
     networks:
       my-network:
 
@@ -18,8 +18,8 @@ services:
     environment:
       - spring.profiles.active=docker
     #      - logging.file=/api-logs/users-ws.log
-    depends_on:
-      - apigateway-service
+#    depends_on:
+#      - apigateway-service
     networks:
       my-network:
 
@@ -29,8 +29,8 @@ services:
     environment:
       - spring.profiles.active=docker
     #      - logging.file=/api-logs/users-ws.log
-    depends_on:
-      - apigateway-service
+#    depends_on:
+#      - apigateway-service
     networks:
       my-network:
 

@@ -27,8 +27,8 @@ spring:
 #          basedir: /Users/dowonlee/Desktop/Work/tmp/config-repo
 #          username: [username]
 #          password: [password]
-        native:
-          search-locations: file:///d:/APP/@inflearn/inflearn-2022-SpringCloudMSA/native-file-repo
+#        native:
+#          search-locations: file:///d:/APP/@inflearn/inflearn-2022-SpringCloudMSA/native-file-repo
 
 management:
   endpoints:

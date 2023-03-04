@@ -14,7 +14,7 @@ encrypt:
   key-store:
     location: file:///d:\APP\@inflearn\inflearn-2022-SpringCloudMSA\keystore\apiEncryptionKey.jks
     password: 1q2w3e4r
-    alias: apiEncryptionKeycd ../com
+    alias: apiEncryptionKey
 ---
 spring.config.activate.on-profile: docker_profile
 
@@ -23,4 +23,4 @@ encrypt:
   key-store:
     location: file:///apiEncryptionKey.jks
     password: 1q2w3e4r
-    alias: apiEncryptionKeycd ../com
+    alias: apiEncryptionKey
