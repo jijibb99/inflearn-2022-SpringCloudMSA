@@ -6,7 +6,7 @@
 }
 </style>
 
-# 강의정리
+# 1. 인프런 강의 따라하기
 
 - Microservice란?
 - Microservice와 SOA

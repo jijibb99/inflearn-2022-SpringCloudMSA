@@ -7,9 +7,9 @@
 </style>
 
 
-# B. Multi구성
+# B. 환경(Config) Multi 구성
 
-2021. 2. 24. 19:50
+2021.02.24. 19:50
 - https://multifrontgarden.tistory.com/277
 
 

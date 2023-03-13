@@ -23,7 +23,11 @@ parts:
     - file: 14-Micrometer.md
     - file: 15-ContainerVirtual.md
     - file: 16-ContainerDeploy.md
-  - file: A01-LinuxSetup.md
-  - file: A02-LinuxDockerCompose.md
-  - file: B01-MultiConfig.md
+  - file: AA-표준정리.md
+    sections:
+    - file: A01-LinuxSetup.md
+    - file: A02-LinuxDockerCompose.md
+    - file: B01-MultiConfig.md
+    - file: B02-Kafka설정.md
+  - file: ZZ-TODO.md
 

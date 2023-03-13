@@ -124,11 +124,11 @@ public class SampleAController extends SKMSAController {
 //    public ResponseEntity<LecturesPostOutDTO> registerLecture(@RequestBody   LecturesPostInDTO lecturesPostInDTO)
     public ResponseEntity<LecturesPostOutDTO> registerLecture(@Valid @RequestBody LecturesPostInDTO lecturesPostInDTO, BindingResult bindingResult)
             throws InterruptedException, ExecutionException, JsonProcessingException {
-        if (getCtx() == null) {
-            log().error(" 시작 시점11111ctx  Null=======================");
-        } else {
-            log().debug("registerLecture: 입력데이터 정상00000");
-        }
+//        if (getCtx() == null) {
+//            log().error(" 시작 시점11111ctx  Null=======================");
+//        } else {
+//            log().debug("registerLecture: 입력데이터 정상00000");
+//        }
 
         //입력자료 기초 검증(Java Validation 결과 확인)
         if (bindingResult.hasErrors()) {
