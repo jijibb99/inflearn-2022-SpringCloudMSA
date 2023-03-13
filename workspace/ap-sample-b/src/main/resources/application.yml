@@ -1,12 +1,23 @@
-# 공통으로 적용되는 속성
+spring:
+  profiles:
+    group:
+      "local": "local_profile,default_profile"
+      "docker": "docker_profile,default_profile"
+---
+#spring.profiles: default
+spring.config.activate.on-profile: default_profile
+
 server.servlet.context-path: /sampleb
+
+#The default binder to use, if multiple binders are configured. See Multiple Binders on the Classpath.
+spring.cloud.stream.default-binder: kafka
+
 spring:
   application:
     name: sampleb
-  profiles: default
   mvc:
     pathmatch:
-      matching-strategy: ANT_PATH_MATCHER     #Swagger 관련 수정  profiles: default
+      matching-strategy: ant_path_matcher     #Swagger 관련 수정
   jpa:
     properties:
       hibernate:
@@ -21,43 +32,71 @@ spring:
           destination: sampleAChanged   #토픽이름
           contentType: application/json    #데이터형식
           group: CGR-sampleb-sampleAChanged  #consumer 그룹: CGR-MSA이름-토픽이름
-  datasource:
-    #  url: jdbc:mysql://mysql/samplea?useUnicode=true&serverTimezone=Asia/Seoul
-    url: jdbc:mysql://vm-mysql13.mysql.database.azure.com:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul
-    username: user
-    password: pwd
-    hikari.initializationFailTimeout: 30000
-
 hibernate.dialect: org.hibernate.dialect.MySQLInnoDBDialect
 
 ---
+#Local Exec
+spring.config.activate.on-profile: local_profile
 server.port: 8092
 
 spring:
-  profiles: local
   cloud:
+    config:
+      enabled=false:   #No spring.config.import property has been defined
     stream:
       kafka:
         binder:
-          brokers: localhost:9092
-# MONGODB (MongoProperties)
-spring.data.mongodb.uri: mongodb://localhost:27017/SKMSA
+          brokers: inno3t2
+          defaultBrokerPort: 4192
+  datasource:
+    #    url: jdbc:mysql://mysql/samplea?useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mariadb://inno3t2:4121/sampleb?useUnicode=true&serverTimezone=Asia/Seoul
+    #   url: jdbc:mysql://vm-mysql13.mysql.database.azure.com:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul
+    username: user
+    password: pwd
+    hikari.initializationFailTimeout: 30000
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://inno3t2:4116/eureka  # default addre [8761 -> 4116]
+
+# MONGODB (MongoProperties)[27017 - 4197]
+spring.data.mongodb.uri: mongodb://inno3t2:4197/SKMSA
 
 #Zipkin
-spring.zipkin.base-url: http://localhost:9411/
+spring.zipkin.base-url: http://inno3t2:4126/    #[9411 -> 4126]
 logging.pattern.console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-B3-ParentSpanId},%X{X-Span-Export}] [%thread] %-5level %logger{36} - %msg%n"
 
-
 ---
-### 여기부터는 Docker 기반 설정
-server.port: 8080
+#Docker
+spring.config.activate.on-profile: docker_profile
+server.port: 0
 
 spring:
-  profiles: docker
   cloud:
     stream:
       kafka:
         binder:
           brokers: kafka:9092
+  datasource:
+    url: jdbc:mariadb://mariadb:3306/sampleb?useUnicode=true&serverTimezone=Asia/Seoul    #[ [3306 -> 4121]
+    #   url: jdbc:mysql://vm-mysql13.mysql.database.azure.com:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul
+    username: user
+    password: pwd
+    hikari.initializationFailTimeout: 30000
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://apigate-service:8761/eureka  # default addre [8761 -> 4116]
+
 # MONGODB (MongoProperties)
-spring.data.mongodb.uri: mongodb://mongo:27017/SKMSA
+spring.data.mongodb.uri: mongodb://mongo:27017/SKMSA      #[27017 - 4197]
+
+#Zipkin
+spring.zipkin.base-url: http://zipkin:9411/    #[9411 -> 4126]
+logging.pattern.console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{X-B3-TraceId},%X{X-B3-SpanId},%X{X-B3-ParentSpanId},%X{X-Span-Export}] [%thread] %-5level %logger{36} - %msg%n"
+

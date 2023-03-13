@@ -1,4 +1,4 @@
-package sample.a.config.controller.errors;
+package sample.a.controller.errors;
 
 public enum ITLogicException_ERR_CODE {
     IF_DATA_INVALID,  	// 데이터 유효값 오류(미 정의된 유효값으로 I/F 요청)

@@ -35,7 +35,7 @@ import java.util.List;
  * <version>3.0.0</version>
  * </dependency>
  */
-@EnableOpenApi
+//@EnableOpenApi
 @EnableSwagger2
 @Configuration
 public class SpringFoxConfig {

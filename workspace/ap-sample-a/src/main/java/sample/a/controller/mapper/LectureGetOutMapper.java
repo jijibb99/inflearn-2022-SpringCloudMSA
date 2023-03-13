@@ -1,9 +1,9 @@
-package sample.a.config.controller.mapper;
+package sample.a.controller.mapper;
 
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import sample.a.config.controller.dto.LecturesGetOutDTO;
+import sample.a.controller.dto.LecturesGetOutDTO;
 import sample.a.domain.SampleA;
 
 import java.util.List;

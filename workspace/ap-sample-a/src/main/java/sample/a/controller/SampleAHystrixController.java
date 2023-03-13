@@ -1,4 +1,4 @@
-package sample.a.config.controller;
+package sample.a.controller;
 
 //import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import io.micrometer.core.instrument.Metrics;
@@ -108,6 +108,5 @@ public class SampleAHystrixController extends SKMSAController {
         System.out.println("SampleAHystrixController.localMethod");
         //log()가 가능한 상태여부 ..
         log().info("localMethod:{}", customerId);
-
     }
 }

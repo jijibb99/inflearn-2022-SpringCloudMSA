@@ -11,11 +11,6 @@ server:
 spring:
   application:
     name: config-service
-  rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
 #  profiles:
 #    active: default
 #    active: native
@@ -42,8 +37,8 @@ spring.config.activate.on-profile: local_profile
 
 spring:
   rabbitmq:
-    host: 127.0.0.1
-    port: 5672
+    host: inno3t2
+    port: 4102
     username: guest
     password: guest
 ---

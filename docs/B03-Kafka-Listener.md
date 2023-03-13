@@ -1,8 +1,8 @@
 clear<style>
 .burk {
-    background-color: red;
-    color: yellow;
-    display:inline-block;
+background-color: red;
+color: yellow;
+display:inline-block;
 }
 </style>
 
@@ -60,11 +60,11 @@ Name or service not known : kafka-1 : Could not resolve host name.
 
 단순히 옵션만 보면 각각 어떤 역할을 하는지 모를 수 있습니다. 아래의 예시를 통해 설명드리겠습니다. 아래 예시는 Docker로 Kafka 클러스터 구성 시 docker-compose.yml에 작성하는 내용입니다. 참고로 Host machine과 Docker container는 39092:39092, 39094:39094로 각 서비스 port에 맞게 port forwarding을 진행했습니다.
 - ![](images/B02-PortForwarding.png)
-
-    - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP : AA:PLAINTEXT, BB:PLAINTEXT
-    - KAFKA_LISTENERS : AA://kafka-3:39092, BB://kafka-3:39094
-    - KAFKA_ADVERTISED_LISTENERS : AA://kafka-3:39092, BB://localhost:39094
-    - KAFKA_INTER_BROKER_LISTENER_NAME : AA
+  
+  - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP : AA:PLAINTEXT, BB:PLAINTEXT
+  - KAFKA_LISTENERS : AA://kafka-3:39092, BB://kafka-3:39094
+  - KAFKA_ADVERTISED_LISTENERS : AA://kafka-3:39092, BB://localhost:39094
+  - KAFKA_INTER_BROKER_LISTENER_NAME : AA
 
 
 
@@ -106,39 +106,39 @@ image: confluentinc/cp-zookeeper:latest
 hostname: zookeeper-1
 ports:
 - "12181:12181"
-environment:
-ZOOKEEPER_SERVER_ID: 1
-ZOOKEEPER_CLIENT_PORT: 12181
-ZOOKEEPER_TICK_TIME: 2000
-ZOOKEEPER_INIT_LIMIT: 5
-ZOOKEEPER_SYNC_LIMIT: 2
-ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  environment:
+  ZOOKEEPER_SERVER_ID: 1
+  ZOOKEEPER_CLIENT_PORT: 12181
+  ZOOKEEPER_TICK_TIME: 2000
+  ZOOKEEPER_INIT_LIMIT: 5
+  ZOOKEEPER_SYNC_LIMIT: 2
+  ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
 zookeeper-2:
 image: confluentinc/cp-zookeeper:latest
 hostname: zookeeper-2
 ports:
 - "22181:12181"
-environment:
-ZOOKEEPER_SERVER_ID: 2
-ZOOKEEPER_CLIENT_PORT: 12181
-ZOOKEEPER_TICK_TIME: 2000
-ZOOKEEPER_INIT_LIMIT: 5
-ZOOKEEPER_SYNC_LIMIT: 2
-ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  environment:
+  ZOOKEEPER_SERVER_ID: 2
+  ZOOKEEPER_CLIENT_PORT: 12181
+  ZOOKEEPER_TICK_TIME: 2000
+  ZOOKEEPER_INIT_LIMIT: 5
+  ZOOKEEPER_SYNC_LIMIT: 2
+  ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
 zookeeper-3:
 image: confluentinc/cp-zookeeper:latest
 hostname: zookeeper-3
 ports:
 - "32181:12181"
-environment:
-ZOOKEEPER_SERVER_ID: 3
-ZOOKEEPER_CLIENT_PORT: 12181
-ZOOKEEPER_TICK_TIME: 2000
-ZOOKEEPER_INIT_LIMIT: 5
-ZOOKEEPER_SYNC_LIMIT: 2
-ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
+  environment:
+  ZOOKEEPER_SERVER_ID: 3
+  ZOOKEEPER_CLIENT_PORT: 12181
+  ZOOKEEPER_TICK_TIME: 2000
+  ZOOKEEPER_INIT_LIMIT: 5
+  ZOOKEEPER_SYNC_LIMIT: 2
+  ZOOKEEPER_SERVERS: zookeeper-1:12888:13888;zookeeper-2:22888:23888;zookeeper-3:32888:33888
 
 kafkacat:
 image: confluentinc/cp-kafkacat
@@ -149,51 +149,51 @@ image: confluentinc/cp-kafka:latest
 ports:
 - "19092:19092"
 - "19094:19094"
-depends_on:
+  depends_on:
 - zookeeper-1
 - zookeeper-2
 - zookeeper-3
-environment:
-KAFKA_BROKER_ID: 1
-KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-KAFKA_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://kafka-1:19094
-KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://localhost:19094
-KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  environment:
+  KAFKA_BROKER_ID: 1
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  KAFKA_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://kafka-1:19094
+  KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:19092,EXTERNAL://localhost:19094
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
 kafka-2:
 image: confluentinc/cp-kafka:latest
 ports:
 - "29092:29092"
 - "29094:29094"
-depends_on:
+  depends_on:
 - zookeeper-1
 - zookeeper-2
 - zookeeper-3
-environment:
-KAFKA_BROKER_ID: 2
-KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-KAFKA_LISTENERS: INTERNAL://kafka-2:29092,EXTERNAL://kafka-2:29094
-KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29092,EXTERNAL://localhost:29094
-KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  environment:
+  KAFKA_BROKER_ID: 2
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  KAFKA_LISTENERS: INTERNAL://kafka-2:29092,EXTERNAL://kafka-2:29094
+  KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-2:29092,EXTERNAL://localhost:29094
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
 kafka-3:
 image: confluentinc/cp-kafka:latest
 ports:
 - "39092:39092"
 - "39094:39094"
-depends_on:
+  depends_on:
 - zookeeper-1
 - zookeeper-2
 - zookeeper-3
-environment:
-KAFKA_BROKER_ID: 3
-KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
-KAFKA_LISTENERS: INTERNAL://kafka-3:39092,EXTERNAL://kafka-3:39094
-KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:39092,EXTERNAL://localhost:39094
-KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  environment:
+  KAFKA_BROKER_ID: 3
+  KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:12181,zookeeper-2:12181,zookeeper-3:12181
+  KAFKA_LISTENERS: INTERNAL://kafka-3:39092,EXTERNAL://kafka-3:39094
+  KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-3:39092,EXTERNAL://localhost:39094
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+  KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
 
 References

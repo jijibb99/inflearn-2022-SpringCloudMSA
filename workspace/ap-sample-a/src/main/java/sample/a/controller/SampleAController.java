@@ -1,4 +1,4 @@
-package sample.a.config.controller;
+package sample.a.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,14 +9,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import sample.a.config.controller.dto.LecturesGetDetailOutDTO;
-import sample.a.config.controller.dto.LecturesGetOutDTO;
-import sample.a.config.controller.dto.LecturesPostInDTO;
-import sample.a.config.controller.dto.LecturesPostOutDTO;
-import sample.a.config.controller.mapper.LectureGetDetailOutMapper;
-import sample.a.config.controller.mapper.LectureGetOutMapper;
-import sample.a.config.controller.mapper.LecturePostInMapper;
-import sample.a.config.controller.mapper.LecturePostOutMapper;
+import sample.a.controller.dto.LecturesGetDetailOutDTO;
+import sample.a.controller.dto.LecturesGetOutDTO;
+import sample.a.controller.dto.LecturesPostInDTO;
+import sample.a.controller.dto.LecturesPostOutDTO;
+import sample.a.controller.mapper.LectureGetDetailOutMapper;
+import sample.a.controller.mapper.LectureGetOutMapper;
+import sample.a.controller.mapper.LecturePostInMapper;
+import sample.a.controller.mapper.LecturePostOutMapper;
 import sample.a.domain.SampleA;
 import sample.a.service.SampleAService;
 import skmsa.apiutil.controller.SKMSAController;

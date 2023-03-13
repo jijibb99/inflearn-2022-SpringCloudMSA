@@ -16,7 +16,7 @@ import sample.a.config.kafka.KafkaProcessor;
 
 @EnableEurekaClient   //컴포넌트 등록을 위하여 추가
 @EnableAutoConfiguration
-//@EnableBinding(KafkaProcessor.class)  //kafka관련 설정 Binder
+@EnableBinding(KafkaProcessor.class)  //kafka관련 설정 Binder
 @ComponentScan(basePackages = {"sample.a.controller.mapper","sample.a", "skmsa"})
 @SpringBootApplication
 @EnableMongoRepositories("skmsa.apiutil.domain.mongorepository")

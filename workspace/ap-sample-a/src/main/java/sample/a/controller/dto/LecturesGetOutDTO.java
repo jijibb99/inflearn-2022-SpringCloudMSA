@@ -1,4 +1,4 @@
-package sample.a.config.controller.dto;
+package sample.a.controller.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

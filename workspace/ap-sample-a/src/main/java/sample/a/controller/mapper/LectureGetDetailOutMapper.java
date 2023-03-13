@@ -1,8 +1,8 @@
-package sample.a.config.controller.mapper;
+package sample.a.controller.mapper;
 
 
 import org.mapstruct.Mapper;
-import sample.a.config.controller.dto.LecturesGetDetailOutDTO;
+import sample.a.controller.dto.LecturesGetDetailOutDTO;
 import sample.a.domain.SampleA;
 
 

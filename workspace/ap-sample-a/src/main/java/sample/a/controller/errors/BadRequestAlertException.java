@@ -1,4 +1,4 @@
-package sample.a.config.controller.errors;
+package sample.a.controller.errors;
 
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;

@@ -1,4 +1,4 @@
-package sample.a.config.controller.mapper;
+package sample.a.controller.mapper;
 
 
 import java.util.List;

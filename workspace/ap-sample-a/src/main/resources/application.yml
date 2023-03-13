@@ -97,7 +97,7 @@ spring:
     stream:
       kafka:
         binder:
-#          brokers: kafka:9092
+          brokers: kafka:9092
   datasource:
     url: jdbc:mariadb://mariadb:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul    #[ [3306 -> 4121]
     #   url: jdbc:mysql://vm-mysql13.mysql.database.azure.com:3306/samplea?useUnicode=true&serverTimezone=Asia/Seoul
