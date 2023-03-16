@@ -3,7 +3,7 @@ package sample.a.service.vo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import sample.a.config.kafka.AbstractEvent;
+import sample.a.adaptor.kafka.AbstractEvent;
 
 @Getter
 @Setter

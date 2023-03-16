@@ -2,12 +2,15 @@ package sample.b;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.test.context.ActiveProfiles;
 import sample.b.controller.ErrorTestRestController;
 import sample.b.controller.dto.Person;
 import sample.b.service.impl.ErrTestServiceImpl;
@@ -25,7 +28,7 @@ import skmsa.apiutil.controller.error.ExceptionAdvice;
 @Import({ErrTestServiceImpl.class, ErrorTestRestController.class, ExceptionAdvice.class})
 @SpringBootTest(classes = {SampleBApplication.class})
 @SpringBootConfiguration
-
+@ActiveProfiles("local")
 public class RestControllerAdviceTest {
     @Autowired
     ErrorTestRestController errorTestRestController;
@@ -49,8 +52,9 @@ public class RestControllerAdviceTest {
         request.setServerName("127.0.0.1:8080");
         request.setRequestURI("/sampleb");
 
-        errorTestRestController.serviceException(person, request);
-//        assertEquals("Myinno", result);
+        Assertions.assertThrows(IllegalStateException.class,
+                (Executable) errorTestRestController.serviceException(person, request));
+        /* assertEquals("Myinno", result); */
     }
 
     @Test
@@ -64,7 +68,6 @@ public class RestControllerAdviceTest {
         request.setServerName("127.0.0.1:8080");
         request.setRequestURI("/sampleb");
 
-        errorTestRestController.controllerException(person, request);
-//        assertEquals("Myinno", result);
-    }
+        Assertions.assertThrows(NullPointerException.class,
+                (Executable) errorTestRestController.controllerException(person, request));    }
 }

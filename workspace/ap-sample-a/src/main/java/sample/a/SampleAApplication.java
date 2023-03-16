@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.web.client.RestTemplate;
-import sample.a.config.kafka.KafkaProcessor;
+import sample.a.adaptor.kafka.KafkaProcessor;
 
 
 @EnableEurekaClient   //컴포넌트 등록을 위하여 추가

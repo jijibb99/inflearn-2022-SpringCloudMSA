@@ -1,16 +1,15 @@
 package sample.a.controller.mapper;
 
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import sample.a.controller.dto.LecturesGetOutDTO;
-import sample.a.domain.SampleA;
+import sample.a.controller.vo.LecturesGetOutDTO;
+import sample.a.domain.entity.SampleAEntity;
 
 import java.util.List;
 
 
 @Mapper(componentModel = "spring")
-public interface LectureGetOutMapper extends EntityMapper<LecturesGetOutDTO, SampleA> {
+public interface LectureGetOutMapper extends EntityMapper<LecturesGetOutDTO, SampleAEntity> {
 
 
 //    @Mapping(target = "status", ignore = true)
@@ -21,10 +20,10 @@ public interface LectureGetOutMapper extends EntityMapper<LecturesGetOutDTO, Sam
 //    Lecture toEntity(LecturesGetOutDTO lectureDTO);
 
     @Mapping(source="id", target="lectureId")
-    LecturesGetOutDTO toDto(SampleA entityList);
+    LecturesGetOutDTO toDto(SampleAEntity entityList);
 
     @Mapping(source="id", target="lectureId")
-    List <LecturesGetOutDTO> toDto(List<SampleA> entityList);
+    List <LecturesGetOutDTO> toDto(List<SampleAEntity> entityList);
     
 //    default Lecture fromId(Long id) {
 //        if (id == null) {

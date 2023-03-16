@@ -2,7 +2,7 @@ package sample.a.domain.vo;
 
 import lombok.Getter;
 import lombok.Setter;
-import sample.a.config.kafka.AbstractEvent;
+import sample.a.adaptor.kafka.AbstractEvent;
 
 /**
  * 강의 변경 이력을 kafka에 등록

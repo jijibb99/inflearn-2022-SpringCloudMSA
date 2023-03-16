@@ -2,7 +2,7 @@
 
 package sample.b.service;
 
-import sample.b.config.kafka.dto.SampleAChanged;
+import sample.b.adaptor.kafka.dto.SampleAChanged;
 import skmsa.apiutil.interceptor.OnlineContext;
 
 public interface SampleBAsyncProcessService {

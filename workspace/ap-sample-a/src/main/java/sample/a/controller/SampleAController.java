@@ -9,15 +9,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import sample.a.controller.dto.LecturesGetDetailOutDTO;
-import sample.a.controller.dto.LecturesGetOutDTO;
-import sample.a.controller.dto.LecturesPostInDTO;
-import sample.a.controller.dto.LecturesPostOutDTO;
 import sample.a.controller.mapper.LectureGetDetailOutMapper;
 import sample.a.controller.mapper.LectureGetOutMapper;
 import sample.a.controller.mapper.LecturePostInMapper;
 import sample.a.controller.mapper.LecturePostOutMapper;
-import sample.a.domain.SampleA;
+import sample.a.controller.vo.LecturesGetDetailOutDTO;
+import sample.a.controller.vo.LecturesGetOutDTO;
+import sample.a.controller.vo.LecturesPostInDTO;
+import sample.a.controller.vo.LecturesPostOutDTO;
+import sample.a.domain.entity.SampleAEntity;
 import sample.a.service.SampleAService;
 import skmsa.apiutil.controller.SKMSAController;
 
@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * REST controller for managing
  */
-@Tag(name = "sampleas", description = "MSA 관련 기본 기능 검증모음 (SampleA)")
+@Tag(name = "sampleas", description = "MSA 관련 기본 기능 검증모음 (SampleAEntity)")
 @RestController
 @RequestMapping("/main")
 public class SampleAController extends SKMSAController {
@@ -68,7 +68,7 @@ public class SampleAController extends SKMSAController {
     public ResponseEntity<LecturesGetDetailOutDTO> getLeature(@PathVariable Long id) {
 //        setCtx("sample.a.getLeature");
         log().debug("getLeature  id: {}", id);
-        Optional<SampleA> lecture = lectureService.findOne(getCtx(), id);
+        Optional<SampleAEntity> lecture = lectureService.findOne(getCtx(), id);
         if (!lecture.isPresent()) {
             log().debug("해당 자료없음 id: {}", id);
             return ResponseEntity.ok().body(null);
@@ -98,7 +98,7 @@ public class SampleAController extends SKMSAController {
                             content = @Content(schema = @Schema(implementation = LecturesGetOutDTO.class)))})
     public ResponseEntity<List<LecturesGetOutDTO>> getLeaturesByCategoryId() {
 //        setCtx("sample.a.getLeaturesByCategoryId");
-        List<SampleA> lectureList = lectureService.findByCategoryId(getCtx());
+        List<SampleAEntity> lectureList = lectureService.findByCategoryId(getCtx());
         if (lectureList.isEmpty()) {
             log().debug("해당 자료없음 id: {}", "");
             return ResponseEntity.ok().body(null);
@@ -140,13 +140,13 @@ public class SampleAController extends SKMSAController {
         Thread.sleep(1000);   // 동시 처리 확인을 위하여
 
         log().debug("registerLecture: 입력데이터 정상11111");
-        SampleA sampleA = lecturePostInMapper.toEntity(lecturesPostInDTO);
+        SampleAEntity sampleA = lecturePostInMapper.toEntity(lecturesPostInDTO);
         if (getCtx() == null) {
             log().error(" 시작 시점22222ctx  Null----------------------");
         } else {
             log().debug(" 시작 시점333333ctx  log OK----------------------");
         }
-        SampleA returnLecture = lectureService.registerLecture(getCtx(), sampleA);
+        SampleAEntity returnLecture = lectureService.registerLecture(getCtx(), sampleA);
         LecturesPostOutDTO returnDto = lecturesPostOutMapper.toDto(returnLecture);
         log().debug("registerLecture: 처리 완료");
 

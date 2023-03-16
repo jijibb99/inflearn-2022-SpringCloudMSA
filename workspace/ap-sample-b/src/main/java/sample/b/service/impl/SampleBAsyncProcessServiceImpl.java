@@ -1,9 +1,9 @@
 package sample.b.service.impl;
 
 import org.springframework.stereotype.Service;
-import sample.b.config.kafka.dto.SampleAChanged;
-import sample.b.domain.SampleARepository;
-import sample.b.domain.SampleB;
+import sample.b.adaptor.kafka.dto.SampleAChanged;
+import sample.b.domain.repository.SampleARepository;
+import sample.b.domain.entity.SampleBEntity;
 import sample.b.service.SampleBAsyncProcessService;
 import skmsa.apiutil.interceptor.OnlineContext;
 import skmsa.apiutil.process.annotation.Retry;
@@ -45,7 +45,7 @@ public class SampleBAsyncProcessServiceImpl extends SKMSAService implements Samp
             log.info("정상 처리: {}", ranNumber);
         }
 
-        SampleB sampleb = new SampleB();
+        SampleBEntity sampleb = new SampleBEntity();
         sampleb.setVersion(sampleAChanged.getVersion());
         sampleb.setTitle(sampleAChanged.getTitle());
         sampleb.setId(sampleAChanged.getId());

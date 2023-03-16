@@ -9,18 +9,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.context.ActiveProfiles;
 import skmsa.apiutil.controller.SKMSAController;
 import skmsa.apiutil.domain.FWK_IO_LOG;
 import skmsa.apiutil.domain.mongorepository.FWK_IO_LOGRepository;
 
 /**
- * SampleB 프로젝트에서 APIUTIL의 빈 호출 테스트
+ * SampleBEntity 프로젝트에서 APIUTIL의 빈 호출 테스트
  */
 @Slf4j
 @Import({BeanCreationTest.AOP1Controller.class})
 @SpringBootTest(classes = {SampleBApplicationTests.class})
 @ComponentScan({"sample.b", "skmsa"})
-
+@ActiveProfiles("local")
 public class BeanCreationTest {
     @Autowired
     AOP1Controller aop1Controller;

@@ -1,7 +1,7 @@
 package sample.b.service;
 
 
-import sample.b.config.kafka.dto.SampleAChanged;
+import sample.b.adaptor.kafka.dto.SampleAChanged;
 
 /**
  * Kafka을 비동기 in 채널 처리

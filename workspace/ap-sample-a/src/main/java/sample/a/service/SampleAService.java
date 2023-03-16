@@ -3,7 +3,7 @@ package sample.a.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import sample.a.domain.SampleA;
+import sample.a.domain.entity.SampleAEntity;
 import skmsa.apiutil.interceptor.OnlineContext;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface SampleAService {
      * @param rentalDTO the entity to save.
      * @return the persisted entity.
      */
-	SampleA save(OnlineContext ctx, SampleA lecture);
+	SampleAEntity save(OnlineContext ctx, SampleAEntity lecture);
 
     /**
      * Get all the Lecture.
@@ -31,7 +31,7 @@ public interface SampleAService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<SampleA> findAll(OnlineContext ctx, Pageable pageable);
+    Page<SampleAEntity> findAll(OnlineContext ctx, Pageable pageable);
 
 
     /**
@@ -40,7 +40,7 @@ public interface SampleAService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    List<SampleA> findByCategoryId(OnlineContext ctx);
+    List<SampleAEntity> findByCategoryId(OnlineContext ctx);
 
     
     /**
@@ -49,7 +49,7 @@ public interface SampleAService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<SampleA> findOne(OnlineContext ctx, Long id);
+    Optional<SampleAEntity> findOne(OnlineContext ctx, Long id);
 
     /**
      * Delete the "id" rental.
@@ -62,5 +62,5 @@ public interface SampleAService {
      * Business Logic
      * 강의 신규 등록
      **/
-    SampleA registerLecture(OnlineContext ctx, SampleA lecture) throws InterruptedException, ExecutionException, JsonProcessingException;
+    SampleAEntity registerLecture(OnlineContext ctx, SampleAEntity lecture) throws InterruptedException, ExecutionException, JsonProcessingException;
 }

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import sample.b.config.kafka.KafkaProcessor;
-import sample.b.config.kafka.dto.SampleAChanged;
-import sample.b.domain.SampleARepository;
+import sample.b.adaptor.kafka.KafkaProcessor;
+import sample.b.adaptor.kafka.dto.SampleAChanged;
+import sample.b.domain.repository.SampleARepository;
 import skmsa.apiutil.interceptor.OnlineContext;
 
 @Service

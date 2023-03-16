@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 import sample.b.service.impl.SampleBAsyncProcessServiceImpl;
 import skmsa.apiutil.controller.SKMSAController;
 import skmsa.apiutil.interceptor.OnlineContext;
@@ -22,7 +23,7 @@ import skmsa.apiutil.service.SKMSAService;
 @Import({AopAspectANDRetryLogTest.AOP1Controller.class, AopAspectANDRetryLogTest.AOP1ServiceImpl.class, AopAspectANDRetryLogTest.AOP2ServiceImpl.class, AopAspectANDRetryLogTest.TestService.class})
 @SpringBootTest(classes = {SampleBApplication.class})
 @SpringBootConfiguration
-
+@ActiveProfiles("local")
 public class AopAspectANDRetryLogTest {
     @Autowired
     AOP1Controller aop1Controller;

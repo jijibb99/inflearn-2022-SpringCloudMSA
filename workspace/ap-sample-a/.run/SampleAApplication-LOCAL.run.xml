@@ -6,7 +6,7 @@
       <env name="spring.cloud.config.enabled" value="false" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="sample.a.SampleAApplication" />
-    <module name="ap-sample-A" />
+    <module name="sample.a" />
     <shortenClasspath name="NONE" />
     <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local" />
     <extension name="com.egoshard.intellij.k8s-runtime-config-plugin">
